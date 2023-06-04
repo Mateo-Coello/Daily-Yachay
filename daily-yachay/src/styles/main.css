@@ -1,0 +1,18 @@
+:root {
+  --ev-bd-color: #8d50ff;
+}
+
+.event-visualizer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* border: 3px solid var(--ev-bd-color); */
+  border-radius: 10px;
+  padding: 10px;
+  background-color: rgb(255, 255, 255);
+}
+
+.section-separator {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

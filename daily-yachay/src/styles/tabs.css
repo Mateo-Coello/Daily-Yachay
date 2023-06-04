@@ -1,0 +1,59 @@
+:root {
+  --tab-bg-color:  #b050ff;
+  --tab-txt-color: #5841c9;
+  --tab-bd-color:  #b050ff;
+}
+
+.tab-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.tab-button {
+  outline: none;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  width: 31%;
+  background-color: transparent;
+  color: var(--tab-txt-color);
+  font-size: 26px;
+  position: relative;
+}
+
+.tab-button:hover {
+  background-color: var(--tab-bg-color);
+  color: white;
+}
+
+.tab-button::after {
+  content: "";
+  position: absolute;
+  bottom: 0%;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  border-radius: 30px;
+  background-color: var(--tab-bd-color);
+  transition: 0.2s ease-in-out;
+}
+
+.tab-button.active::after {
+  width: 100%;
+}
+
+.no-hover:hover {
+  background-color: transparent;
+  color: var(--tab-txt-color);
+  cursor: default;
+}
+
+.content {
+  display: none;
+}
+
+.show-content {
+  display: block;
+}
