@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/comments.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import DynamicTextarea from './dynamic-text-area';
+import DynamicTextarea from './DynamicTextArea';
 
 // const FetchPreviousComments = (eventID) => {
 //     ;

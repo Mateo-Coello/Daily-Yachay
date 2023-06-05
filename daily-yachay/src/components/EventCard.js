@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../styles/events.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
-import CommentsSection from './comments.js'
+import CommentsSection from './Comments.js'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 
 const PreviousEventCard = ({
@@ -90,7 +90,7 @@ const EventCard = ({
           </NavItem>
         </Nav>
 
-        <div style={{width: '100%'}}>
+        <div style={{width: '100%', marginTop: '10px'}}>
           <TabContent activeTab={activeTab}>
 
             <TabPane tabId="1" >
@@ -136,6 +136,7 @@ const EventCard = ({
       </div>
 
       <img src={eventCoverPath} alt="/images/yachay.jpg" />
+
     </div>
   );
 };
