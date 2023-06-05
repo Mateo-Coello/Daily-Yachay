@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import './bootstrap/css/bootstrap.min.css';
 import './styles/main.css'
 import './styles/tabs.css';
-import TabButton from './components/tab-buttons'
-import { PreviousEventCard, EventCard } from './components/display-events';
+import TabButton from './components/TabButton'
+import { PreviousEventCard, EventCard } from './components/EventCard';
 
 const EventTabs = () => {
 
   const [tab, setTab] = useState(2);
   const [clickedButton, setClickedButton] = useState(2);
-
+  
   const handleClick = (buttonId) => {
     setTab(buttonId);
     setClickedButton(buttonId);
