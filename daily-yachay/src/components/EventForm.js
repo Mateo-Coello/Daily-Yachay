@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
+import '../styles/events.css';
 import {
   Button,
   Modal,
@@ -10,137 +11,236 @@ import {
   FormGroup,
   Input,
   Label,
+  Row,
+  Col,
 } from "reactstrap";
 
-const EventForm = ({ isOpen, toggle }) => {
+class EventForm extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeItem: {
+        title: '',
+        organizer: '',
+        exhibitors: '',
+        location: '',
+        openEvent: true,
+        availPlaces: '',
+        date: '',
+        startTime: '',
+        endTime: '',
+        description: '',
+      },
+    };
+  }
 
-  const [activeItem, setActiveItem] = useState({
-    title: '',
-    organizer: '',
-    exhibitors: '',
-    location: '',
-    date: '',
-    time: '',
-    description: '',
-  });
+  handleChange = (e) => {
+    const { id, name, value} = e.target;
+    let {activeItem} = this.state;
+    let updatedValue = value;
+  
+    if (id === 'event-open-option' || id === 'event-closed-option') {
+      updatedValue = id === 'event-open-option';
+    }
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setActiveItem((prevItem) => ({ ...prevItem, [name]: value }));
-  };
+    if (activeItem.openEvent) {
+      activeItem.availPlaces = '';
+    }
+  
+    this.setState((prevState) => ({
+      activeItem: {
+        ...prevState.activeItem,
+        [name]: updatedValue,
+      },
+    }));
+  };  
 
-  const onSave = (item) => {
+  onSave = (item) => {
     console.log(item);
   };
 
-  return (
-    <Modal isOpen={isOpen} toggle={toggle} xl scrollable centered>
-      <ModalHeader toggle={toggle}>Crear Evento</ModalHeader>
-      <ModalBody>
-        <Form>
-          <FormGroup>
-            <Label for="event-title">Título:</Label>
-            <Input
-              type="text"
-              id="event-title"
-              name="title"
-              value={activeItem.title}
-              onChange={handleChange}
-              placeholder="Introduzca el titulo del evento"
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="event-organizer">Organizador:</Label>
-            <Input
-              type="text"
-              id="event-organizer"
-              name="organizer"
-              value={activeItem.organizer}
-              onChange={handleChange}
-              placeholder="Introduzca el organizador del evento"
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="event-organizer">Expositores:</Label>
-            <Input
-              type="text"
-              id="event-exhibitors"
-              name="exhibitors"
-              value={activeItem.exhibitors}
-              onChange={handleChange}
-              placeholder="Introduzca los expositores del evento"
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="event-organizer">Lugar:</Label>
-            <Input
-              type="text"
-              id="event-location"
-              name="location"
-              value={activeItem.location}
-              onChange={handleChange}
-              placeholder="Introduzca el lugar del evento"
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="event-date">Fecha:</Label>
-            <Input
-              type="date"
-              id="event-date"
-              name="date"
-              placeholder="Seleccione la fecha del evento"
-              value={activeItem.date}
-              onChange={handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="todo-description">Hora:</Label>
-            <Input
-              type="time"
-              id="event-time"
-              name="time"
-              value={activeItem.time}
-              onChange={handleChange}
-              placeholder="Seleccione la hora del evento"
-            />
-          </FormGroup>
+  render() {
+    const { isOpen, toggle } = this.props;
+    const { activeItem } = this.state;
 
-          <FormGroup>
-            <Label for="todo-description">Descripción:</Label>
-            <Input
-              id="exampleText"
-              name="text"
-              type="textarea"
-              value={activeItem.time}
-              onChange={handleChange}
-            />
-          </FormGroup>
+    return (
+      <Modal isOpen={isOpen} toggle={toggle} size="lg" scrollable centered>
+        <ModalHeader toggle={toggle}>Crear Evento</ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label for="event-title">Título:</Label>
+              <Input
+                type="text"
+                id="event-title"
+                name="title"
+                value={activeItem.title}
+                onChange={this.handleChange}
+                placeholder="Introduzca el título del evento"
+              />
+            </FormGroup>
 
-          <FormGroup>
-            <Label for="exampleFile">Portada</Label>
-            <Input
-              id="exampleFile"
-              name="file"
-              type="file"
-            />
-            <FormText>
-              Asegurate que la imagen tenga una resolucion de al menos 400x500 pixeles. 
-            </FormText>
-          </FormGroup>
+            <FormGroup>
+              <Label for="event-organizer">Organizador:</Label>
+              <Input
+                type="text"
+                id="event-organizer"
+                name="organizer"
+                value={activeItem.organizer}
+                onChange={this.handleChange}
+                placeholder="Introduzca el organizador del evento"
+              />
+            </FormGroup>
 
-        </Form>
-      </ModalBody>
+            <FormGroup>
+              <Label for="event-organizer">Expositores:</Label>
+              <Input
+                type="text"
+                id="event-exhibitors"
+                name="exhibitors"
+                value={activeItem.exhibitors}
+                onChange={this.handleChange}
+                placeholder="Introduzca los expositores del evento"
+              />
+            </FormGroup>
 
-      <ModalFooter>
-        <Button
-          color="success"
-          onClick={() => onSave(activeItem)}
-        >
-          Agregar Evento
-        </Button>
-      </ModalFooter>
-    </Modal>
-  );
+            <FormGroup>
+              <Label for="event-organizer">Lugar:</Label>
+              <Input
+                type="text"
+                id="event-location"
+                name="location"
+                value={activeItem.location}
+                onChange={this.handleChange}
+                placeholder="Introduzca el lugar del evento"
+              />
+            </FormGroup>
+
+            <FormGroup tag="fieldset">
+              <Label>
+                Tipo de evento:
+              </Label>
+              <FormGroup check>
+                <Input
+                  type="radio"
+                  id="event-open-option"
+                  name="openEvent"
+                  value={activeItem.openEvent}
+                  onChange={this.handleChange}
+                />
+                {' '}
+                <Label check>
+                  Abierto
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Input
+                  type="radio"
+                  id="event-closed-option"
+                  name="openEvent"
+                  value={activeItem.openEvent}
+                  onChange={this.handleChange}
+                />
+                {' '}
+                <Label check>
+                 Requiere Inscripción
+                </Label>
+              </FormGroup>
+            </FormGroup>
+
+            {!activeItem.openEvent && (
+              <FormGroup className='d-flex align-items-center' style={{ width: '15%' }}>
+                <Label style={{ marginRight: '10px' }}>Cupos: </Label>
+                <Input
+                  type="text"
+                  id="event-avail-places"
+                  name="availPlaces"
+                  value={activeItem.availPlaces}
+                  onChange={this.handleChange}
+                  style={{ padding: '5px', textAlign: 'right'}}
+                />
+              </FormGroup>
+            )}
+
+            <Row>
+              <Col>
+                <FormGroup className='d-flex align-items-center'>
+                  <Label for="event-date" style={{ marginRight: '10px' }}>Fecha:</Label>
+                  <Input
+                    type="date"
+                    id="event-date"
+                    name="date"
+                    placeholder="Seleccione la fecha del evento"
+                    value={activeItem.date}
+                    onChange={this.handleChange}
+                  />
+                </FormGroup>
+              </Col>
+
+              <Col>
+                <FormGroup className='d-flex align-items-center'>
+                    <Label style={{ marginRight: '10px' }}>Hora:</Label>
+                    <Row>
+                      <Col>
+                        <Input
+                          type="time"
+                          id="event-startTime"
+                          name="startTime"
+                          value={activeItem.startTime}
+                          onChange={this.handleChange}
+                        />
+                      </Col>
+                      <Col>
+                        <Input
+                          type="time"
+                          id="event-endTime"
+                          name="endTime"
+                          value={activeItem.endTime}
+                          onChange={this.handleChange}
+                        />
+                      </Col>
+                    </Row>
+                </FormGroup>
+              </Col>
+            </Row>
+
+            <FormGroup>
+              <Label for="event-description">Descripción:</Label>
+              <Input
+                type="textarea"
+                id="event-description"
+                name="description"
+                value={activeItem.description}
+                onChange={this.handleChange}
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label for="event-coverImg">Portada</Label>
+              <Input
+                type="file"
+                id="event-coverImg"
+                name="coverImg"
+              />
+              <FormText>
+                Asegúrate que la imagen tenga una resolución de al menos 400x500 pixeles.
+              </FormText>
+            </FormGroup>
+
+          </Form>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button
+            color="success"
+            onClick={() => this.onSave(activeItem)}
+          >
+            Agregar Evento
+          </Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
 }
 
 export default EventForm;

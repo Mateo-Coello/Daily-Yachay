@@ -1,24 +1,33 @@
+import React, { Component } from 'react';
 import './App.css';
-import React, { useState } from 'react';
 import EventForm from './components/EventForm';
 import EventTabs from './EventViewer';
 
-function App() {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalIsOpen: false
+    };
+  }
 
-  const toggleModal = () => {
-    setModalIsOpen(!modalIsOpen);
+  toggleModal = () => {
+    this.setState((prevState) => ({
+      modalIsOpen: !prevState.modalIsOpen
+    }));
   };
 
-  return (
-    <div className="App">
-      <button onClick={toggleModal}> Crear Evento</button>
+  render() {
+    const { modalIsOpen } = this.state;
 
-      <EventForm isOpen={modalIsOpen} toggle={toggleModal} />
-
-      <EventTabs/>
-    </div>
-  );
+    return (
+      <div className="App">
+        <button onClick={this.toggleModal}> Crear Evento</button>
+        <EventForm isOpen={modalIsOpen} toggle={this.toggleModal} />
+        <EventTabs/>
+      </div>
+    );
+  }
 }
 
 export default App;

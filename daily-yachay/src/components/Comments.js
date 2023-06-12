@@ -1,71 +1,70 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import '../styles/comments.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import DynamicTextarea from './DynamicTextArea';
 
-// const FetchPreviousComments = (eventID) => {
-//     ;
-// }
-
-const CommentsSection = () => {
-    const [inputValue, setInputValue] = useState('');
-    const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState('');
-    // const [showComments, setShowComments] = useState(false);
-
-    const handleCommentSubmit = (event) => {
-        event.preventDefault();
-        if (newComment.trim() !== '') {
-            setComments([...comments, newComment]);
-            setNewComment('');
-        }
+class CommentsSection extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      eventId: this.props.eventID,
+      inputValue: '',
+      comments: [],
+      newComment: '',
     };
+  }
 
-    // const handleToggleComments = () => {
-    //     setShowComments(true)
-    // };
+  handleCommentSubmit = (event) => {
+    event.preventDefault();
+    const { newComment, comments } = this.state;
+    if (newComment.trim() !== '') {
+      this.setState({
+        comments: [...comments, newComment],
+        newComment: '',
+      });
+    }
+  };
+
+  render() {
+    const { inputValue, comments, newComment } = this.state;
 
     return (
-        <div className='comment-section'>
+      <div className="comment-section">
+        {comments.length > 0 && (
+          <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+            {comments.map((commentContent, commentID) => (
+              <div className="comment<h2>Fecha: </h2>">
+                <p key={commentID}>{commentContent}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {comments.length === 0 && <p>No comments yet.</p>}
 
-            {/* <button
-                onClick={handleToggleComments}
-                className={showComments ? 'comments-button active' : 'comments-button'}>
-                <FontAwesomeIcon icon={faMessage} />
-            </button> */}
+        <div className="add-comment-section">
+          <div style={{ width: '35px' }}>
+            <img
+              className="profile-picture"
+              src="/images/default-profile-pic.jpg"
+              alt="/images/default-profile-pic.jpg"
+            />
+          </div>
 
-            {comments.length > 0 && (
-                <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                    {comments.map((commentContent, commentID) => (
-                        <div className='comment'>
-                            <p key={commentID}>{commentContent}</p>
-                        </div>
-                    ))}
-                </div>
-            )}
-            {comments.length === 0 && <p>No comments yet.</p>}
+          <form onSubmit={this.handleCommentSubmit}>
+            <DynamicTextarea
+              inputValue={inputValue}
+              setInputValue={(value) => this.setState({ newComment: value })}
+            />
 
-            <div className='add-comment-section'>
-
-                <div style={{ width: '35px' }}>
-                    <img className="profile-picture" src="/images/default-profile-pic.jpg" alt="/images/default-profile-pic.jpg" />
-                </div>
-
-                <form onSubmit={handleCommentSubmit}>
-
-                    <DynamicTextarea inputValue={inputValue} setInputValue={setInputValue}/>
-                    
-                    <button
-                        class="comment-submit-button"
-                        type="submit">
-                        <FontAwesomeIcon icon={faPaperPlane} />
-                    </button>
-                </form>
-            </div>
-
+            <button className="comment-submit-button" type="submit">
+              <FontAwesomeIcon icon={faPaperPlane} />
+            </button>
+          </form>
         </div>
+      </div>
     );
+  }
 }
 
 export default CommentsSection;

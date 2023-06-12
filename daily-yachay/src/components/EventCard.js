@@ -1,144 +1,121 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import '../styles/events.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import CommentsSection from './Comments.js'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 
-const PreviousEventCard = ({
-  eventTitle,
-  eventOrganizer,
-  eventExhibitor = 'Unknown',
-  eventLocation,
-  eventStartHour,
-  eventEndHour,
-  eventSummary,
-  eventCoverPath,
-}) => {
-  return (
-    <div className='event-container'>
-      <div className='event-information'>
-        <h1>{eventTitle}</h1>
-        <h2>Organizador: {eventOrganizer}</h2>
-        <h2>Expositor: {eventExhibitor}</h2>
-        <h2>Lugar: {eventLocation}</h2>
-        <h2>Hora: {eventStartHour} - {eventEndHour}</h2>
-        {/* <p>Informacion: {eventSummary}</p> */}
-      </div>
-      <img src={eventCoverPath} alt="/images/yachay.jpg" />
-    </div>
-  );
-};
-
-const EventCard = ({
-  eventTitle,
-  eventOrganizer,
-  eventExhibitor = 'Unknown',
-  eventLocation,
-  eventStartHour,
-  eventEndHour,
-  eventSummary,
-  eventCoverPath,
-}) => {
-
-  const [reminder, setReminder] = useState(false);
-  const [register, setRegister] = useState(false);
-  const registerButtonText = register ? 'Inscrito' : 'Inscribirse';
-  const [activeTab, setActiveTab] = useState("1");
-
-  const handleReminder = (reminder) => {
-    setReminder(reminder);
+class EventCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      reminder: false,
+      register: false,
+      registerButtonText: 'Inscribirse',
+      activeTab: '1'
+    };
   }
 
-  const handleRegister = (register) => {
-    setRegister(register);
+  handleReminder = (reminder) => {
+    this.setState({ reminder });
   }
 
-  return (
-    <div className='event-container'>
+  handleRegister = (register) => {
+    this.setState({ register });
+  }
 
-      <div className='event-information'>
+  render() {
+    const {
+      eventID = '0',
+      eventTitle,
+      eventOrganizer,
+      eventExhibitor = 'Unknown',
+      eventDate,
+      eventStartTime,
+      eventEndTime,
+      eventLocation,
+      eventSummary,
+      eventCoverPath
+    } = this.props;
 
-        <h1>{eventTitle}</h1>
+    const { reminder, register, registerButtonText, activeTab } = this.state;
 
-        <Nav justified tabs className='tabs'>
-          <NavItem>
-            <NavLink
-            className={activeTab === "1" ? "active" : ""}
-            onClick={() => setActiveTab("1")}
-            >
-            Información
-            </NavLink>
-          </NavItem>
-
-          <NavItem>
-          <NavLink
-            className={activeTab === "2" ? "active" : ""}
-            onClick={() => setActiveTab("2")}
-            >
-            Detalles
-            </NavLink>
-          </NavItem>
-
-          <NavItem>
-          <NavLink
-            className={activeTab === "3" ? "active" : ""}
-            onClick={() => setActiveTab("3")}
-            >
-            Comentarios
-            </NavLink>
-          </NavItem>
-        </Nav>
-
-        <div style={{width: '100%', marginTop: '10px'}}>
-          <TabContent activeTab={activeTab}>
-
-            <TabPane tabId="1" >
-
-              <div className='content-left'>
-                <h2>Organizador: {eventOrganizer}</h2>
-                <h2>Expositor: {eventExhibitor}</h2>
-                <h2>Lugar: {eventLocation}</h2>
-              </div>
-
-              <div className='event-options' style={{ justifyContent: 'space-between', width: '100%' }}>
-                <h2>Hora: {eventStartHour} - {eventEndHour}</h2>
-
-                <div className='event-options'>
-                  <button
-                    onClick={() => handleReminder(!reminder)}
-                    className={reminder ? 'reminder-button active' : 'reminder-button'}>
-                    <FontAwesomeIcon icon={faBell} />
-                  </button>
-
-                  <button
-                    onClick={() => handleRegister(!register)}
-                    className={register ? 'register-button active' : 'register-button'}>
-                    {registerButtonText}
-                  </button>
+    return (
+      <div className='event-container'>
+        <div className='event-information'>
+          <h1>{eventTitle}</h1>
+          <Nav justified tabs className='tabs'>
+            <NavItem>
+              <NavLink
+                className={activeTab === '1' ? 'active' : ''}
+                onClick={() => this.setState({ activeTab: '1' })}
+              >
+                Información
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={activeTab === '2' ? 'active' : ''}
+                onClick={() => this.setState({ activeTab: '2' })}
+              >
+                Detalles
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={activeTab === '3' ? 'active' : ''}
+                onClick={() => this.setState({ activeTab: '3' })}
+              >
+                Comentarios
+              </NavLink>
+            </NavItem>
+          </Nav>
+          <div className='w-100 mt-2'>
+            <TabContent activeTab={activeTab}>
+              <TabPane tabId='1'>
+                <div className='content-left'>
+                  <h2>Organizador: {eventOrganizer}</h2>
+                  <h2>Expositor: {eventExhibitor}</h2>
+                  <h2>Lugar: {eventLocation}</h2>
+                  <h2>Fecha: {eventDate.toLocaleDateString('es-EC')}</h2>
                 </div>
-              </div>
+        
+                <div className='event-options'>
+                  <h2>Hora: {eventStartTime.toLocaleTimeString('es-EC')} - {eventEndTime.toLocaleTimeString('es-EC')}</h2>
+                  {eventDate >= new Date() &&
+                   eventStartTime > new Date() ? (
+                    <div className='event-options'>
+                      <button
+                        onClick={() => this.handleReminder(!reminder)}
+                        className={reminder ? 'reminder-button active' : 'reminder-button'}
+                      >
+                        <FontAwesomeIcon icon={faBell} />
+                      </button>
+                      <button
+                        onClick={() => this.handleRegister(!register)}
+                        className={register ? 'register-button active' : 'register-button'}
+                      >
+                        {registerButtonText}
+                      </button>
+                    </div>
+                  ) : null}
+                </div>
 
-            </TabPane>
-
-            <TabPane tabId="2">
-              <p>{eventSummary}</p>
-            </TabPane>
-
-            <TabPane tabId="3">
-              <CommentsSection />
-            </TabPane>
-
-          </TabContent>
-
+              </TabPane>
+              <TabPane tabId='2'>
+                <p>{eventSummary}</p>
+              </TabPane>
+              <TabPane tabId='3'>
+                <CommentsSection eventID={eventID}/>
+              </TabPane>
+            </TabContent>
+          </div>
         </div>
-
+        <img src={eventCoverPath} alt="/images/yachay.jpg" />
       </div>
+    );
+  }
+}
 
-      <img src={eventCoverPath} alt="/images/yachay.jpg" />
+export default EventCard;
 
-    </div>
-  );
-};
-
-export { PreviousEventCard, EventCard };
