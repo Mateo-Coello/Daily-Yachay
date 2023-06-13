@@ -1,8 +1,4 @@
-:root {
-  --tab-bg-color:  #b050ff;
-  --tab-txt-color: #5841c9;
-  --tab-bd-color:  #b050ff;
-}
+@import 'variables.css';
 
 .tab-buttons {
   display: flex;

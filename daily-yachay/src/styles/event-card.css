@@ -1,11 +1,4 @@
-:root {
-  --ev-bg-color: transparent;
-  --ev-h1-color: #8728ca;
-  --ev-h2-color: #000000;
-  --ev-p-color: #000000;
-  --ev-bu-color: #485c70;
-  --ev-bf-color: #6faee9;
-}
+@import 'variables.css';
 
 .event-container {
   display: flex;
@@ -31,8 +24,8 @@
   object-fit: cover;
   width: 45%;
   height: 500px;
-  border-radius: 5px;
-  z-index: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .event-container h1 {
@@ -67,19 +60,26 @@
   align-items: flex-start;
 }
 
-.tabs {
+.tabs{
   width: 100%;
 }
 
 .tabs .nav-link{
-  color: black;
+  color: #4c89c1;
   font-size: 20px;
-  transition: 0.2s ease-in-out;
+  font-weight: 500;
+}
+
+.tabs .nav-link:hover{
+  color: white !important;
+  background-color: #b3d0ea !important;
+  cursor: pointer;
 }
 
 .tabs .nav-link.active{
-  color: white;
-  background: #6faee9;
+  color: #ffffff !important;
+  background-color: #6faee9 !important;
+  cursor: default;
 }
 
 .reminder-button {

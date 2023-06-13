@@ -1,0 +1,23 @@
+:root {
+  /* App Styles */
+  --app-tp-bg-color: #097ac0;
+
+  /*  Event Styles */
+  --tab-bg-color:  #6faee9;
+  --tab-txt-color: #4c89c1;
+  --tab-bd-color:  #6faee9;
+
+  /*  Event Visualizer Styles */
+  --ev-bg-color: transparent;
+  --ev-h1-color: #4c89c1;
+  --ev-h2-color: #000000;
+  --ev-p-color: #000000;
+  --ev-bu-color: #485c70;
+  --ev-bf-color: #6faee9;
+  --ev-bd-color: #6faee9;
+
+  /* Comments Section Styles */
+  --cs-bg-color: #d8d8d8;
+  --cs-bd-color: #485c70;
+  --cs-txt-color: #000000;
+}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../styles/events.css';
+import '../styles/event-card.css';
 import {
   Button,
   Modal,

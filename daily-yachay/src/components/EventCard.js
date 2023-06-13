@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../styles/events.css';
+import '../styles/event-card.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import CommentsSection from './Comments.js'
@@ -47,7 +47,7 @@ class EventCard extends Component {
           <Nav justified tabs className='tabs'>
             <NavItem>
               <NavLink
-                className={activeTab === '1' ? 'active' : ''}
+                className={activeTab === '1' ? 'active ' : ''}
                 onClick={() => this.setState({ activeTab: '1' })}
               >
                 Información
@@ -55,7 +55,7 @@ class EventCard extends Component {
             </NavItem>
             <NavItem>
               <NavLink
-                className={activeTab === '2' ? 'active' : ''}
+                className={activeTab === '2' ? 'active ' : ''}
                 onClick={() => this.setState({ activeTab: '2' })}
               >
                 Detalles
@@ -63,7 +63,7 @@ class EventCard extends Component {
             </NavItem>
             <NavItem>
               <NavLink
-                className={activeTab === '3' ? 'active' : ''}
+                className={activeTab === '3' ? 'active ' : ''}
                 onClick={() => this.setState({ activeTab: '3' })}
               >
                 Comentarios

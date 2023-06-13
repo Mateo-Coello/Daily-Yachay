@@ -1,15 +1,13 @@
-:root {
-  --ev-bd-color: #8d50ff;
-}
+@import 'variables.css';
 
-.event-visualizer {
+.event-viewer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   /* border: 3px solid var(--ev-bd-color); */
   border-radius: 10px;
   padding: 10px;
-  background-color: rgb(255, 255, 255);
+  background-color: #ffffff;
 }
 
 .section-separator {
