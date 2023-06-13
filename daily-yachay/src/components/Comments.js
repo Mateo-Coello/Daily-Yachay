@@ -43,13 +43,10 @@ class CommentsSection extends Component {
         {comments.length === 0 && <p>No comments yet.</p>}
 
         <div className="add-comment-section">
-          <div style={{ width: '35px' }}>
-            <img
-              className="profile-picture"
-              src="/images/default-profile-pic.jpg"
-              alt="/images/default-profile-pic.jpg"
-            />
-          </div>
+          <img
+            src="/images/default-profile-pic.jpg"
+            alt="/images/default-profile-pic.jpg"
+          />
 
           <form onSubmit={this.handleCommentSubmit}>
             <DynamicTextarea
