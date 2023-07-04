@@ -29,12 +29,24 @@
   padding: 10px;
 }
 
-.App-profile-picture {
+.profile-button {
+  border-radius: 50%;
   width: 47px;
   height: 47px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-left: 5px;
+  background-color: white;
+  color: var(--app-tp-bg-color);
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  margin-left: 10px;
+}
+
+.profile-button:hover {
+  background-color: #d4e5ef;
 }
 
 .create-event-button {
