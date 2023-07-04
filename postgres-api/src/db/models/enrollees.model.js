@@ -7,7 +7,7 @@ class Enrollees extends Model {
         Enrollees.belongsTo(models.Users, {
             foreignKey: 'u_id',
             targetKey: 'id',
-            as: 'user'
+            as: 'users'
         });
         Enrollees.belongsTo(models.Events, {
             foreignKey: 'e_id',
@@ -29,6 +29,7 @@ class Enrollees extends Model {
 const Enrollees_Schema = {
     id : {
         allowNull: false,
+        primaryKey: true,
         type: DataTypes.INTEGER,
         autoIncrement: true,
         field: 'id',

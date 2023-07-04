@@ -1,4 +1,4 @@
-const EnrolleesService = require('../services/enrollees.service');
+const EnrolleesService = require('../services/enrollees.services');
 
 const service = new EnrolleesService();
 

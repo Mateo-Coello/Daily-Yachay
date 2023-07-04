@@ -3,6 +3,8 @@ const express = require('express');
 const usersRouter = require('./users.router');
 const eventsRouter = require('./events.router');
 const commentsRouter = require('./comments.router');
+const enrolleesRouter = require('./enrollees.router');
+const eventCoversRouter = require('./eventCovers.router');
 
 function routerApi(app) {
   const router = express.Router();
@@ -10,6 +12,8 @@ function routerApi(app) {
   router.use('/users', usersRouter);
   router.use('/events', eventsRouter);
   router.use('/comments', commentsRouter);
+  router.use('/enrollees', enrolleesRouter);
+  router.use('/covers', eventCoversRouter);
 }
 
 module.exports = routerApi;

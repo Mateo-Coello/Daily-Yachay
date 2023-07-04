@@ -7,11 +7,8 @@ class Comments extends Model {
         Comments.belongsTo(models.Users, {
             foreignKey: 'u_id',
             targetKey: 'id',
-            as: 'user'
+            as: 'users'
         });
-    }
-
-    static associate(models) {
         Comments.belongsTo(models.Events, {
             foreignKey: 'e_id',
             targetKey: 'id',
@@ -21,11 +18,11 @@ class Comments extends Model {
 
     static config(sequelize) {
         return {
-        sequelize,
-            tableName: EVENTS_TABLE,
+            sequelize,
+            tableName: COMMENTS_TABLE,
             modelName: 'Comments',
             timestamps: true
-        }
+        };
     }
 } 
 
@@ -54,19 +51,19 @@ const Comments_Schema = {
           key: 'id'
         }
     },
-    parent_comment_id: {
+    p_id: {
         allowNull: true,
-        type: DataTypes.STRING(30),
-        field: 'parent_comment_id',
+        type: DataTypes.STRING(10),
+        field: 'parent_id',
         references: {
-          model: COMMENTS_TABLE,
-          key: ['id']
+          model: 'comments',
+          key: 'id'
         }
     },
     content: {
         allowNull: false,
         type: DataTypes.STRING(5000),
-        field: 'content',
+        field: 'content'
     }
 }
 

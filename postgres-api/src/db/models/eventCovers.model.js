@@ -25,8 +25,7 @@ const EventCovers_Schema = {
     cover_id:{
         allowNull: false,
         primaryKey: true,
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.STRING(25),
         field: 'cover_id',
     },
     e_id: {

@@ -34,8 +34,8 @@ const updateCover = async (req, res) => {
 
 const _deleteCover = async (req, res) => {
   try {
-      const { id } = req.params; 
-      const response = await service.delete(id);
+      const { coverId } = req.params; 
+      const response = await service.delete(coverId);
       res.json(response);
   } catch (error) {
       res.status(500).send({ success: false, message: error.message });
