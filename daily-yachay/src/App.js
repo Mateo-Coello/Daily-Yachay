@@ -1,47 +1,50 @@
 import React, { Component } from 'react';
 import './styles/App.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
 import EventForm from './components/EventForm';
 import EventTabs from "./components/EventViewer";
+import Login from "./components/login";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalIsOpen: false
+      createEventModalIsOpen: false,
+      loginModalIsOpen: false
     };
   }
 
-  toggleModal = () => {
+  toggleCreateEventModal = () => {
     this.setState((prevState) => ({
-      modalIsOpen: !prevState.modalIsOpen
+      createEventModalIsOpen: !prevState.createEventModalIsOpen
+    }));
+  };
+
+  toggleLoginModal = () => {
+    this.setState((prevState) => ({
+      loginModalIsOpen: !prevState.loginModalIsOpen
     }));
   };
 
   render() {
-    const { modalIsOpen } = this.state;
+    const { createEventModalIsOpen, loginModalIsOpen } = this.state;
 
     return (
       <div className="App">
-
         <div className='App-topbar'>
           <h1>Daily Yachay</h1>
-
           <div className='App-topbar-buttons'>
-            <button className='create-event-button' onClick={this.toggleModal}> 
+            <button className='create-event-button' onClick={this.toggleCreateEventModal}>
               <FontAwesomeIcon icon={faPlus} />
             </button>
-            <EventForm isOpen={modalIsOpen} toggle={this.toggleModal} />
-
-            <img
-              className="App-profile-picture"
-              src="/images/default-profile-pic.jpg"
-              alt="/images/default-profile-pic.jpg"
-            />  
+            {createEventModalIsOpen && <EventForm isOpen={createEventModalIsOpen} toggle={this.toggleCreateEventModal} />}
+            <button className="profile-button" onClick={this.toggleLoginModal}>
+              <FontAwesomeIcon icon={faUser}/>
+            </button>
+            {loginModalIsOpen && <Login isOpen={loginModalIsOpen} toggle={this.toggleLoginModal} />}
           </div>
         </div>
-
         <EventTabs/>
       </div>
     );
