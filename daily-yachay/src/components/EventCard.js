@@ -50,7 +50,7 @@ class EventCard extends Component {
                 className={activeTab === '1' ? 'active ' : ''}
                 onClick={() => this.setState({ activeTab: '1' })}
               >
-                Información
+                Detalles
               </NavLink>
             </NavItem>
             <NavItem>
@@ -58,7 +58,7 @@ class EventCard extends Component {
                 className={activeTab === '2' ? 'active ' : ''}
                 onClick={() => this.setState({ activeTab: '2' })}
               >
-                Detalles
+                Descripción
               </NavLink>
             </NavItem>
             <NavItem>
