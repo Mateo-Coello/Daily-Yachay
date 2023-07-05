@@ -3,7 +3,7 @@ const router = express.Router();
 const eventsController = require('../controllers/events.controller');
 
 router
-  .get('/event/:id', eventsController.getEventById)
+  .get('/:id', eventsController.getEventById)
   .get('/today/:currentDate', eventsController.getTodayEvents)
   .get('/previous/:currentDate', eventsController.getPreviousEvents)
   .get('/future/:currentDate', eventsController.getFutureEvents)

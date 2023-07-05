@@ -1,12 +1,12 @@
 const { models } = require('../libs/sequelize');
-const sequelize = require('sequelize')
+// const sequelize = require('sequelize')
 
 class EventsService { 
   
     constructor() {}
 
     async findEvent(id) {
-      const res = await models.Users.findByPk(id);
+      const res = await models.Events.findByPk(id);
       return res;
     }
 
