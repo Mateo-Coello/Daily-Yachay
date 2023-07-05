@@ -47,10 +47,10 @@ const Events_Schema = {
         type: DataTypes.STRING(100),
         field:'organizer'
     },
-    expositors:{ 
+    exhibitors:{ 
         allowNull: false,
         type: DataTypes.STRING(100),
-        field: 'expositors'
+        field: 'exhibitors'
     },
     date:{
         allowNull: false,
@@ -90,7 +90,7 @@ const Events_Schema = {
     avail_places: {
         allowNull: true,
         type: DataTypes.INTEGER,
-        field: 'open_event'
+        field: 'avail_places'
     },
     recur_event:{
         allowNull: false,
