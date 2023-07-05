@@ -1,4 +1,5 @@
 const { models } = require('../libs/sequelize');
+const sequelize = require('sequelize')
 
 class EventsService { 
   
@@ -9,18 +10,24 @@ class EventsService {
       return res;
     }
 
-    async findTodayEvents(curr_date) {
-      const res = await models.Events.findAll({where: {date: curr_date}});
+    async findTodayEvents(date) {
+      const res = await models.Events.findAll({
+        where: sequelize.literal(`date = '${date}'`),
+      });
       return res;
     }
 
-    async findPreviousEvents(curr_date) {
-      const res = await models.Events.findAll({where: {date: {lt: curr_date}}});
+    async findPreviousEvents(date) {
+      const res = await models.Events.findAll({
+        where: sequelize.literal(`date < '${date}'`),
+      });
       return res;
     }
 
-    async findFutureEvents(curr_date) {
-      const res = await models.Events.findAll({where: {date: {gt: curr_date}}});
+    async findFutureEvents(date) {
+      const res = await models.Events.findAll({
+        where: sequelize.literal(`date > '${date}'`),
+      });
       return res;
     }
 
