@@ -1,5 +1,5 @@
 const { models } = require('../libs/sequelize');
-// const sequelize = require('sequelize')
+const sequelize = require('sequelize')
 
 class EventsService { 
   

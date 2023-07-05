@@ -3,8 +3,7 @@ import "../bootstrap/css/bootstrap.min.css";
 import "../styles/event-viewer.css";
 import "../styles/tabs.css";
 import TabButton from "./TabButton";
-import EventCard from "./EventCard";
-
+import EventList from "../services/get_events";
 class EventViewer extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +19,9 @@ class EventViewer extends Component {
       clickedButton: buttonId,
     });
   };
+
+
+  
 
   render() {
     const { tab, clickedButton } = this.state;
@@ -50,47 +52,16 @@ class EventViewer extends Component {
 
           <div className="section-separator"></div>
 
+
           <div className={tab === 1 ? "show-content" : "content"}>
-            <EventCard
-              eventTitle="Club de Japones"
-              eventLocation="I-102"
-              eventDate={new Date("2023-02-05")}
-              eventStartTime={new Date("2000-01-01 10:00")}
-              eventEndTime={new Date("2000-01-01 11:00")}
-              eventSummary="Primera Reunion del Club de Japones"
-              eventCoverPath="/images/yachay.jpg"
-            />
-            <EventCard
-              eventTitle="Club de Japones"
-              eventLocation="I-102"
-              eventDate={new Date("2023-06-12")}
-              eventStartTime={new Date("2000-01-01 11:00")}
-              eventEndTime={new Date("2000-01-01 12:00")}
-              eventSummary="Primera Reunion del Club de Japones"
-              eventCoverPath="/images/yachay.jpg"
-            />
+
+            {tab === 1 && <EventList route="previous" />}
           </div>
           <div className={tab === 2 ? "show-content" : "content"}>
-            <EventCard
-              eventTitle="Club de Japones"
-              eventLocation="I-102"
-              eventDate={new Date()}
-              eventStartTime={new Date("2000-01-01 15:00")}
-              eventEndTime={new Date("2000-01-01 16:00")}
-              eventSummary="Primera Reunion del Club de Japones"
-              eventCoverPath="/images/yachay.jpg"
-            />
+            {tab === 2 && <EventList route="today" />}
           </div>
           <div className={tab === 3 ? "show-content" : "content"}>
-            <EventCard
-              eventTitle="Club de Ruso"
-              eventLocation="I-202"
-              eventDate={new Date("2023-07-03 00:00")}
-              eventStartTime={new Date("2023-07-03 13:00")}
-              eventEndTime={new Date("2023-07-03 15:00")}
-              eventSummary="Primera Reunion del Club de Ruso"
-              eventCoverPath="/images/yachay.jpg"
-            />
+            {tab === 3 && <EventList route="future" />}
           </div>
         </div>
       </div>

@@ -10,4 +10,15 @@ const config = {
   dbPort:  process.env.DB_PORT,
 }
 
-module.exports = { config };
+
+
+
+const AWS = require('aws-sdk');
+
+AWS.config.update({
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY
+});
+
+
+module.exports = { config, AWS };

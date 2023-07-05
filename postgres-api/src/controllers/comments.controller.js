@@ -14,7 +14,7 @@ const createComment = async ( req, res ) => {
 const getComments = async (req, res) => {
   try {
       const { eventId } = req.params; 
-      const response = await service.findComments(eventId);
+      const response = await service.findCommentsByEventId(eventId);
       res.json(response);
   } catch (error) {
       res.status(500).send({ success: false, message: error.message });
