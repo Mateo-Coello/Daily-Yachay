@@ -8,6 +8,8 @@ const config = {
   dbHost:  process.env.DB_HOST,
   dbName:  process.env.DB_NAME,
   dbPort:  process.env.DB_PORT,
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
 }
 
 

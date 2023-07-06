@@ -60,15 +60,26 @@ const getEventsByRange = async ( req, res ) => {
   }
 }
 
-const getEventsByOrganizer = async ( req, res ) => {
-  try {
+// const getEventsByOrganizer = async ( req, res ) => {
+//   try {
+//       const { organizer } = req.params;
+//       const response = await service.findByOrganizer(organizer);
+//       res.json(response);
+//   } catch (error) {
+//       res.status(500).send({ success: false, message: error.message });
+//   }
+// }
+
+const getEventsByOrganizer = async (req, res) => {
+    try {
       const { organizer } = req.params;
       const response = await service.findByOrganizer(organizer);
       res.json(response);
-  } catch (error) {
+    } catch (error) {
       res.status(500).send({ success: false, message: error.message });
-  }
-}
+    }
+  };
+
 
 const getEventsByCategory = async ( req, res ) => {
   try {

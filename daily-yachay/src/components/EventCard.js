@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell } from '@fortawesome/free-solid-svg-icons'
 import CommentsSection from './Comments.js'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import { format } from 'date-fns';
+
 
 class EventCard extends Component {
   constructor(props) {
@@ -77,7 +79,7 @@ class EventCard extends Component {
                   <h2>Organizador: {eventOrganizer}</h2>
                   <h2>Expositor: {eventExhibitor}</h2>
                   <h2>Lugar: {eventLocation}</h2>
-                  <h2>Fecha: {eventDate.toLocaleDateString('es-EC')}</h2>
+                  <h2>Fecha: {format(eventDate, 'dd/MM/yyyy')}</h2>
                 </div>
         
                 <div className='event-options'>

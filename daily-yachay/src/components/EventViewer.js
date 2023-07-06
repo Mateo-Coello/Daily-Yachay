@@ -3,7 +3,7 @@ import "../bootstrap/css/bootstrap.min.css";
 import "../styles/event-viewer.css";
 import "../styles/tabs.css";
 import TabButton from "./TabButton";
-import EventList from "../services/get_events";
+import EventList from "../services/events";
 class EventViewer extends Component {
   constructor(props) {
     super(props);

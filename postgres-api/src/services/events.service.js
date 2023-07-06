@@ -1,5 +1,7 @@
 const { models } = require('../libs/sequelize');
-const sequelize = require('sequelize')
+const sequelize = require('sequelize');
+const { Op } = require('sequelize')
+
 
 class EventsService { 
   
@@ -42,10 +44,34 @@ class EventsService {
       return res;
     }
     
-    async findByOrganizer(organizer) {
-      const res = await models.Events.findAll({where: {organizer: organizer}});
-      return res;
+    // async findByOrganizer(organizer) {
+    //   const res = await models.Events.findAll({where: {organizer: organizer}});
+    //   return res;
+    // }
+
+
+    // Buscada por Organizador usando palabras Clave
+    
+    async  findByOrganizer(keywords) {
+      try {
+        const keywordArray = keywords.split(' ');
+
+        const res = await models.Events.findAll({
+          where: {
+            organizer: {
+              [Op.or]: keywordArray.map(keyword => ({
+                [Op.iLike]: `%${keyword}%`
+              }))
+            }
+          }
+        });
+
+        return res;
+      } catch (error) {
+        throw new Error(error.message);
+      }
     }
+
 
     async findByCategory(category) {
       const res = await models.Events.findAll({where: {category: category}});
