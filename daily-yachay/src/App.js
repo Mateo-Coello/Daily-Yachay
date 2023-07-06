@@ -5,6 +5,7 @@ import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
 import EventForm from './components/EventForm';
 import EventTabs from "./components/EventViewer";
 import Login from "./components/login";
+import SearchBar from './components/search-bar';
 
 
 class App extends Component {
@@ -28,13 +29,25 @@ class App extends Component {
     }));
   };
 
+  handleSearch = (selectedCriteria, searchQuery, startDate, endDate) => {
+    // Lógica de búsqueda aquí
+    console.log("Search criteria:", selectedCriteria);
+    console.log("Search query:", searchQuery);
+    console.log("Start date:", startDate);
+    console.log("End date:", endDate);
+  };
+  
+
   render() {
     const { createEventModalIsOpen, loginModalIsOpen } = this.state;
+    
 
     return (
       <div className="App">
         <div className='App-topbar'>
           <h1>Daily Yachay</h1>
+          <SearchBar onSearch={this.handleSearch} /> 
+
           <div className='App-topbar-buttons'>
             <button className='create-event-button' onClick={this.toggleCreateEventModal}>
               <FontAwesomeIcon icon={faPlus} />
