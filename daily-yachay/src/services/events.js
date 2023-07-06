@@ -23,7 +23,7 @@ async function getEventsByRoute(route, currentDate) {
 }
 
 // Funcion renderizadora usando el componente Eventcard
-const EventList = ({ route }) => {
+export const EventList = ({ route }) => {
   const [events, setEvents] = useState([]);
   const [currentDate, setCurrentDate] = useState('');
 
@@ -62,11 +62,8 @@ const EventList = ({ route }) => {
   );
 };
 
+
 // Filtrar los datos por Organizador
-
-// async function getEventsByOrganizer () 
-
-
 
 async function getMappedEventsByOrganizer(organizer) {
   try {
@@ -91,7 +88,7 @@ async function getMappedEventsByOrganizer(organizer) {
   }
 }
 
-const EventList_Organizer = ({ organizer }) => {
+export const EventList_Organizer = ({ organizer }) => {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -128,5 +125,5 @@ const EventList_Organizer = ({ organizer }) => {
 
 
 
-export default {EventList, EventList_Organizer};
+
 
