@@ -50,6 +50,24 @@ const getFutureEvents = async ( req, res ) => {
   }
 }
 
+const getEventsByFilters = async (req, res) => {
+  try {
+    const { title, organizer, category, location, startDate, endDate } =
+      req.params;
+    const response = await service.findByFilters(
+      title,
+      organizer,
+      category,
+      location,
+      startDate,
+      endDate
+    );
+    res.json(response);
+  } catch (error) {
+    res.status(500).send({ success: false, message: error.message });
+  }
+};
+
 const getEventsByRange = async ( req, res ) => {
   try {
       const { startDate, endDate } = req.params;
@@ -123,7 +141,16 @@ const _deleteEvent = async (req, res) => {
 }
 
 module.exports = {
-  createEvent, updateEvent, _deleteEvent, getEventById, getTodayEvents,
-  getPreviousEvents, getFutureEvents, getEventsByRange,
-  getEventsByOrganizer, getEventsByCategory, getEventsByLocation
+  createEvent,
+  updateEvent,
+  _deleteEvent,
+  getEventById,
+  getTodayEvents,
+  getPreviousEvents,
+  getFutureEvents,
+  getEventsByFilters,
+  getEventsByRange,
+  getEventsByOrganizer,
+  getEventsByCategory,
+  getEventsByLocation,
 };

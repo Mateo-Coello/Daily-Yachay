@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../styles/event-card.css';
+import EventServices from "../services/events.services";
 import {
   Button,
   Modal,
@@ -19,49 +20,76 @@ class EventForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: {
-        title: '',
-        organizer: '',
-        exhibitors: '',
-        location: '',
-        openEvent: true,
-        availPlaces: '',
-        date: '',
-        startTime: '',
-        endTime: '',
-        description: '',
+      postData: {
+        id: "",
+        u_id: "",
+        title: "",
+        organizer: "",
+        exhibitors: "",
+        date: "",
+        start_hour: "",
+        end_hour: "",
+        location: "",
+        category: "",
+        description: "",
+        open_event: true,
+        avail_places: null,
+        recur_event: false,
       },
     };
   }
 
+  static generateUniqueId() {
+    const timestamp = Date.now().toString(36); // Convert timestamp to base36 string
+    const randomString = Math.random().toString(36).substring(2, 12); // Generate random string
+    const uniqueId = timestamp + randomString; // Concatenate timestamp and random string
+    return uniqueId.substring(0, 30); // Trim the ID to be 30 characters long
+  }
+
   handleChange = (e) => {
-    const { id, name, value} = e.target;
-    let {activeItem} = this.state;
+    const { id, name, value } = e.target;
     let updatedValue = value;
-  
-    if (id === 'event-open-option' || id === 'event-closed-option') {
-      updatedValue = id === 'event-open-option';
+
+    if (id === "event-open-option" || id === "event-closed-option") {
+      updatedValue = id === "event-open-option";
     }
 
-    if (activeItem.openEvent) {
-      activeItem.availPlaces = '';
-    }
-  
     this.setState((prevState) => ({
-      activeItem: {
-        ...prevState.activeItem,
+      postData: {
+        ...prevState.postData,
         [name]: updatedValue,
       },
     }));
-  };  
+  };
 
-  onSave = (item) => {
-    console.log(item);
+  handleCreateEvent = () => {
+    const event_id = EventForm.generateUniqueId();
+  
+    this.setState(
+      (prevState) => ({
+        postData: {
+          ...prevState.postData,
+          id: event_id,
+          u_id: "U1",
+        },
+      }),
+      async () => {
+        console.log(this.state.postData);
+  
+        try {
+          await EventServices.createEvent(this.state.postData);
+          // Additional logic or state updates upon successful event creation
+        } catch (error) {
+          console.error("Error creating event:", error.message);
+          // Additional error handling or state updates for error scenario
+        }
+      }
+    );
   };
 
   render() {
     const { isOpen, toggle } = this.props;
-    const { activeItem } = this.state;
+    const { postData } = this.state;
 
     return (
       <Modal isOpen={isOpen} toggle={toggle} size="lg" scrollable centered>
@@ -74,7 +102,7 @@ class EventForm extends Component {
                 type="text"
                 id="event-title"
                 name="title"
-                value={activeItem.title}
+                value={postData.title}
                 onChange={this.handleChange}
                 placeholder="Introduzca el título del evento"
               />
@@ -86,7 +114,7 @@ class EventForm extends Component {
                 type="text"
                 id="event-organizer"
                 name="organizer"
-                value={activeItem.organizer}
+                value={postData.organizer}
                 onChange={this.handleChange}
                 placeholder="Introduzca el organizador del evento"
               />
@@ -98,10 +126,27 @@ class EventForm extends Component {
                 type="text"
                 id="event-exhibitors"
                 name="exhibitors"
-                value={activeItem.exhibitors}
+                value={postData.exhibitors}
                 onChange={this.handleChange}
                 placeholder="Introduzca los expositores del evento"
               />
+            </FormGroup>
+
+            <FormGroup className="input-field">
+              <Label for="eventCategory">Categoría:</Label>
+              <Input
+                id="eventCategory"
+                name="category"
+                type="select"
+                value={postData.category}
+                onChange={this.handleChange}
+              >
+                <option value="">Seleccione una categoría:</option>
+                <option value="Congreso">Congreso</option>
+                <option value="Feria">Feria</option>
+                <option value="Taller">Taller</option>
+                <option value="Reunion Club">Reunion Club</option>
+              </Input>
             </FormGroup>
 
             <FormGroup>
@@ -110,96 +155,109 @@ class EventForm extends Component {
                 type="text"
                 id="event-location"
                 name="location"
-                value={activeItem.location}
+                value={postData.location}
                 onChange={this.handleChange}
                 placeholder="Introduzca el lugar del evento"
               />
             </FormGroup>
 
             <FormGroup tag="fieldset">
-              <Label>
-                Tipo de evento:
-              </Label>
-              <FormGroup check>
-                <Input
-                  type="radio"
-                  id="event-open-option"
-                  name="openEvent"
-                  value={activeItem.openEvent}
-                  onChange={this.handleChange}
-                />
-                {' '}
-                <Label check>
-                  Abierto
-                </Label>
-              </FormGroup>
-              <FormGroup check>
-                <Input
-                  type="radio"
-                  id="event-closed-option"
-                  name="openEvent"
-                  value={activeItem.openEvent}
-                  onChange={this.handleChange}
-                />
-                {' '}
-                <Label check>
-                 Requiere Inscripción
-                </Label>
-              </FormGroup>
+              <Row>
+                <Label>Tipo de evento:</Label>
+                <Col>
+                  <FormGroup check>
+                    <Input
+                      type="radio"
+                      id="event-open-option"
+                      name="open_event"
+                      value={postData.open_event}
+                      onChange={this.handleChange}
+                    />{" "}
+                    <Label check>Abierto</Label>
+                  </FormGroup>
+                  <FormGroup check>
+                    <Input
+                      type="radio"
+                      id="event-closed-option"
+                      name="open_event"
+                      value={postData.open_event}
+                      onChange={this.handleChange}
+                    />{" "}
+                    <Label check>Requiere Inscripción</Label>
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup check>
+                    <Input
+                      type="checkbox"
+                      id="event-recur-event"
+                      name="recur_event"
+                      value={postData.recur_event}
+                      onChange={this.handleChange}
+                    />{" "}
+                    <Label check>Evento Recurrente</Label>
+                  </FormGroup>
+                </Col>
+              </Row>
             </FormGroup>
 
-            {!activeItem.openEvent && (
-              <FormGroup className='d-flex align-items-center' style={{ width: '15%' }}>
-                <Label style={{ marginRight: '10px' }}>Cupos: </Label>
+            {!postData.open_event && (
+              <FormGroup
+                className="d-flex align-items-center"
+                style={{ width: "15%" }}
+              >
+                <Label style={{ marginRight: "10px" }}>Cupos: </Label>
                 <Input
                   type="text"
                   id="event-avail-places"
-                  name="availPlaces"
-                  value={activeItem.availPlaces}
+                  name="avail_places"
+                  value={postData.avail_places}
                   onChange={this.handleChange}
-                  style={{ padding: '5px', textAlign: 'right'}}
+                  style={{ padding: "5px", textAlign: "right" }}
                 />
               </FormGroup>
             )}
 
             <Row>
               <Col>
-                <FormGroup className='d-flex align-items-center'>
-                  <Label for="event-date" style={{ marginRight: '10px' }}>Fecha:</Label>
+                <FormGroup className="d-flex align-items-center">
+                  <Label for="event-date" style={{ marginRight: "10px" }}>
+                    Fecha:
+                  </Label>
                   <Input
                     type="date"
                     id="event-date"
                     name="date"
                     placeholder="Seleccione la fecha del evento"
-                    value={activeItem.date}
+                    value={postData.date}
                     onChange={this.handleChange}
                   />
                 </FormGroup>
               </Col>
 
               <Col>
-                <FormGroup className='d-flex align-items-center'>
-                    <Label style={{ marginRight: '10px' }}>Hora:</Label>
-                    <Row>
-                      <Col>
-                        <Input
-                          type="time"
-                          id="event-startTime"
-                          name="startTime"
-                          value={activeItem.startTime}
-                          onChange={this.handleChange}
-                        />
-                      </Col>
-                      <Col>
-                        <Input
-                          type="time"
-                          id="event-endTime"
-                          name="endTime"
-                          value={activeItem.endTime}
-                          onChange={this.handleChange}
-                        />
-                      </Col>
-                    </Row>
+                <FormGroup className="d-flex align-items-center">
+                  <Label style={{ marginRight: "10px" }}>Hora:</Label>
+                  <Row>
+                    <Col>
+                      <Input
+                        type="time"
+                        id="event-start_hour"
+                        name="start_hour"
+                        value={postData.start_hour}
+                        onChange={this.handleChange}
+                      />
+                    </Col>
+                    <Col>
+                      <Input
+                        type="time"
+                        id="event-end_hour"
+                        name="end_hour"
+                        value={postData.end_hour}
+                        onChange={this.handleChange}
+                      />
+                    </Col>
+                  </Row>
                 </FormGroup>
               </Col>
             </Row>
@@ -210,31 +268,23 @@ class EventForm extends Component {
                 type="textarea"
                 id="event-description"
                 name="description"
-                value={activeItem.description}
+                value={postData.description}
                 onChange={this.handleChange}
               />
             </FormGroup>
 
             <FormGroup>
               <Label for="event-coverImg">Portada</Label>
-              <Input
-                type="file"
-                id="event-coverImg"
-                name="coverImg"
-              />
-              <FormText>
+              <Input type="file" id="event-coverImg" name="coverImg" />
+              {/* <FormText>
                 Asegúrate que la imagen tenga una resolución de al menos 400x500 pixeles.
-              </FormText>
+              </FormText> */}
             </FormGroup>
-
           </Form>
         </ModalBody>
 
         <ModalFooter>
-          <Button
-            color="success"
-            onClick={() => this.onSave(activeItem)}
-          >
+          <Button color="success" onClick={this.handleCreateEvent}>
             Agregar Evento
           </Button>
         </ModalFooter>

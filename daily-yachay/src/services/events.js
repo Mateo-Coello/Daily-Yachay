@@ -2,12 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import EventCard from '../components/EventCard';
 
-// import { getEventCover } from './covers';
-
-
-
-// Fetch de los eventos previos, hoy y futuros (falta arreglas los covers/portadas)
-
 
 // Obtener previos/hoy/futuros
 async function getEventsByRoute(route, currentDate) {
@@ -15,7 +9,6 @@ async function getEventsByRoute(route, currentDate) {
     const response = await axios.get(`http://localhost:4000/events/${route}/:${currentDate}`);
     // 
     return response.data;
-
   
   } catch (error) {
     throw new Error(error.message);
@@ -46,6 +39,7 @@ export const EventList = ({ route }) => {
     <div>
       {events.map(event => (
         <EventCard
+          key={event.id}
           eventID={event.id}
           eventTitle={event.title}
           eventOrganizer={event.organizer}
@@ -62,8 +56,48 @@ export const EventList = ({ route }) => {
   );
 };
 
+// async function getEventsByFilters({title, organizer, category, location, endDate, startDate}) {
+//   try {
+//     const response = await axios.get(`http://127.0.0.1:4000/events/filters/ttl=${title}/org=${organizer}/cat=${category}/loc=${location}/startD=${startDate}/endD=${endDate}`);
+//     return response.data;
+//   } catch (error) {
+//     throw new Error(error.message);
+//   }
+// }
 
-// Filtrar los datos por Organizador
+// export const eventListByFilters = (searchFilters) => {
+//   const [events, setEvents] = useState([]);
+
+//   useEffect(() => {
+//     getEventsByFilters(searchFilters)
+//       .then(data => {
+//         setEvents(data);
+//       })
+//       .catch(error => {
+//         console.error(error);
+//       });
+//   }, searchFilters);
+
+//   return (
+//     <div>
+//       {events.map(event => (
+//         <EventCard
+//           key={event.id}
+//           eventID={event.id}
+//           eventTitle={event.title}
+//           eventOrganizer={event.organizer}
+//           eventExhibitor={event.exhibitors}
+//           eventLocation={event.location}
+//           eventDate={new Date(event.date + 'T00:00:00')}
+//           eventStartTime={new Date(`2000-01-01 ${event.start_hour}`)}
+//           eventEndTime={new Date(`2000-01-01 ${event.end_hour}`)}
+//           eventSummary={event.description}
+//           eventCoverPath="/images/yachay.jpg"
+//         />
+//       ))}
+//     </div>
+//   );
+// };
 
 async function getMappedEventsByOrganizer(organizer) {
   try {
@@ -121,9 +155,4 @@ export const EventList_Organizer = ({ organizer }) => {
     </div>
   );
 };
-
-
-
-
-
 

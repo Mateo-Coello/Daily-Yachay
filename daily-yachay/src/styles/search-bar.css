@@ -1,29 +1,49 @@
 .SearchBar {
-    margin-bottom: 10px;
-  }
+  margin-bottom: 10px;
+}
   
-  label {
-    margin-bottom: 5px;
-  }
-  
-  input[type="search"] {
-    padding: 1px 10px;
-    border-radius: 10px;
-    width: 400px;
-    height: 25px;
-    color:  #000000;
-    background: #ffffff;
-  }
-  
-  input[type="checkbox"] {
-    margin-right: 5px;
-  }
-  
-  button {
-    display: block;
-    color:  #ffffff;
-    background: #6faee9;
-    margin-top: 10px;
-    border-radius: 10px;
-  }
-  
+.filter-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  color: var(--tab-txt-color);
+  padding: 5px;
+  /* border: 2px solid var(--tab-bg-color); */
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 18px;
+  text-align: center;
+}
+
+.filter-button.active {
+  color: white;
+  background-color: var(--tab-bg-color);
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 5px;
+}
+
+.input-date-range {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.input-date-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  cursor: default;
+  background: transparent;
+  z-index: 1;
+  pointer-events: none;
+}

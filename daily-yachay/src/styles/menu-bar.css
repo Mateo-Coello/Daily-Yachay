@@ -1,0 +1,83 @@
+.menu-bar {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 150px; 
+  height: 100%; 
+  background-color: #3c4965; 
+  justify-content: center;
+  align-items: center;
+  color: white;
+  z-index: 1;
+}
+
+.menu-bar.active {
+  z-index: 3;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  height: 30%;
+  justify-content: space-between;
+  width: 90%;
+  padding: 0px;
+}
+
+.menu-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 10px;
+  color: white;
+  height: 17%;
+  background-color: transparent;
+  border: none;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.menu-button:hover {
+  background-color: #737d94;
+}
+
+.menu-button.active {
+  border: 2px solid #cad7e4;
+  font-weight: 700;
+  align-items: center;
+}
+
+.menu-button img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 150px;
+  width: 360px;
+  height: 100%;
+  border-left: 1px solid #9ba8b1;
+  background-color: #3c4965;
+  overflow: hidden;
+  transition: width 0.3s ease-in-out;
+  transform: translateX(-100%);
+}
+
+.drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-content {
+  position: relative;
+  top: 15%;
+  padding: 20px;
+}
+

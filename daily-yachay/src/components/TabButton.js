@@ -5,7 +5,7 @@ const TabButton = ({ id, handleClick, clickedButton, text }) => {
   return (
     <button 
       onClick={() => handleClick(id)}
-      className={clickedButton === id ? "tab-button active no-hover" : "tab-button"}>
+      className={clickedButton === id ? "col-3 tab-button active no-hover" : "tab-button"}>
       {text}
     </button>
   );
