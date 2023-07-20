@@ -22,8 +22,9 @@ export const EventList = ({ route }) => {
 
   useEffect(() => {
     const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-    console.log(formattedDate)
+    const options = { timeZone: 'America/Guayaquil' }; // Configura la zona horaria de Ecuador
+    const formattedDate = today.toLocaleDateString('es-EC', options).split('/').reverse().join('-');
+    console.log(formattedDate);
     setCurrentDate(formattedDate);
 
     getEventsByRoute(route, currentDate)

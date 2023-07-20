@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 const config = {
+
+  // AMAZON DBSQL
   env: process.env.NODE_ENV || 'dev',
   port: process.env.PORT || 4000,
   dbUser:  process.env.DB_USER,
@@ -10,11 +12,14 @@ const config = {
   dbPort:  process.env.DB_PORT,
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
+
+  // GOOGLE OAUTH
+  googleClientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+  googleOauthRedirect: process.env.GOOGLE_OAUTH_REDIRECT_UR,
 }
 
-
-
-
+// S3 AMAZON 
 const AWS = require('aws-sdk');
 
 AWS.config.update({
