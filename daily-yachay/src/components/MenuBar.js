@@ -23,6 +23,7 @@ class MenuBar extends Component {
       searchFilters,
       handleFilterValue,
       handleSearchByFilters,
+      handleProfileButton,
     } = this.props;
 
     return (
@@ -33,12 +34,12 @@ class MenuBar extends Component {
             className={
               clickedButton === 1 ? "menu-button active" : "menu-button"
             }
-            onClick={() => handleHomeButton(1)}
+            onClick={() => handleHomeButton()}
           >
             <span style={{ width: "30px", height: "30px" }}>
               <FontAwesomeIcon icon={faHouse} />
             </span>
-            <span style={{ marginLeft: "10px" }}>Home</span>
+            <span style={{ marginLeft: "10px" }}>Inicio</span>
           </button>
 
           <button
@@ -51,7 +52,7 @@ class MenuBar extends Component {
             <span style={{ width: "30px", height: "30px" }}>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </span>
-            <span style={{ marginLeft: "10px" }}>Search</span>
+            <span style={{ marginLeft: "10px" }}>Filtrar</span>
           </button>
 
           <button
@@ -64,7 +65,7 @@ class MenuBar extends Component {
             <span style={{ width: "30px", height: "30px" }}>
               <FontAwesomeIcon icon={faPlus} />
             </span>
-            <span style={{ marginLeft: "10px" }}>Create</span>
+            <span style={{ marginLeft: "10px" }}>Crear</span>
           </button>
 
           <button
@@ -72,13 +73,13 @@ class MenuBar extends Component {
             className={
               clickedButton === 4 ? "menu-button active" : "menu-button"
             }
-            onClick={() => toggleMenuModal(4)}
+            onClick={() => handleProfileButton()}
           >
             <img
               src="/images/default-profile-pic.jpg"
               alt="/images/default-profile-pic.jpg"
             />
-            <span style={{ marginLeft: "10px" }}>Profile</span>
+            <span style={{ marginLeft: "10px" }}>Perfil</span>
           </button>
 
           <EventForm

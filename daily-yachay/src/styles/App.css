@@ -1,12 +1,17 @@
 @import 'variables.css';
 
 .App {
+  position: relative;
   text-align: center;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.App-title {
+  font-family: 'Leckerli One', cursive;
 }
 
 .App-topbar {
@@ -32,18 +37,17 @@
 }
 
 .profile-button {
-  border-radius: 50%;
-  width: 47px;
-  height: 47px;
-  background-color: white;
-  color: var(--app-tp-bg-color);
-  font-size: 30px;
+  border-radius: 5px;
+  /* width: 47px;
+  height: 47px; */
+  background-color: transparent;
+  color: white;
+  font-size: 17px;
   display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  border: none;
+  border: 2px solid white;
   outline: none;
+  padding: 5px;
   margin-left: 10px;
 }
 

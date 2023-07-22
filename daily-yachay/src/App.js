@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import "./styles/search-bar.css";
 import "./styles/App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import EventServices from "./services/events.services";
-import EventForm from "./components/EventForm";
 import EventViewer from "./components/EventViewer";
 import Login from "./components/Login";
 import MenuBar from "./components/MenuBar";
+import UserProfile from "./components/UserProfile";
 
 class App extends Component {
   constructor(props) {
@@ -15,9 +15,10 @@ class App extends Component {
     this.state = {
       loginModalIsOpen: false,
       eventViewerIsOpen: true,
-      menuBarClickedButton: 0,
+      menuBarClickedButton: 1,
       menuBarModalIsOpen: false,
       createEventModalIsOpen: false,
+      userProfileIsOpen: false,
       searchFilters: {
         title: "",
         organizer: "",
@@ -33,10 +34,14 @@ class App extends Component {
 
   toggleCreateEventModal = () => {
     this.setState((prevState) => {
-      const { createEventModalIsOpen, menuBarClickedButton, menuBarModalIsOpen } = prevState;
+      const {
+        createEventModalIsOpen,
+        menuBarClickedButton,
+        menuBarModalIsOpen,
+      } = prevState;
       let updatedMenuBarClickedButton = menuBarClickedButton;
       let updatedMenuBarModalIsOpen = menuBarModalIsOpen;
-  
+
       if (!createEventModalIsOpen) {
         // Toggle the modal from false to true
         updatedMenuBarClickedButton = 3;
@@ -46,7 +51,7 @@ class App extends Component {
         updatedMenuBarClickedButton = 0;
         updatedMenuBarModalIsOpen = false;
       }
-  
+
       return {
         createEventModalIsOpen: !createEventModalIsOpen,
         menuBarClickedButton: updatedMenuBarClickedButton,
@@ -54,7 +59,7 @@ class App extends Component {
       };
     });
   };
- 
+
   toggleLoginModal = () => {
     this.setState((prevState) => ({
       loginModalIsOpen: !prevState.loginModalIsOpen,
@@ -87,22 +92,33 @@ class App extends Component {
     });
   };
 
-  handleHomeButton = (buttonId) => {
+  handleHomeButton = () => {
     this.setState((prevState) => {
       if (!prevState.eventViewerIsOpen) {
         return {
-          menuBarClickedButton: buttonId,
+          menuBarClickedButton: 1,
           eventViewerIsOpen: true,
           menuBarModalIsOpen: false,
+          userProfileIsOpen: false,
         };
       } else if (prevState.eventViewerIsOpen) {
         return {
-          menuBarClickedButton: buttonId,
+          menuBarClickedButton: 1,
           menuBarModalIsOpen: false,
           showFilteredEvents: false,
+          userProfileIsOpen: false,
         };
       }
     });
+  };
+
+  handleProfileButton = () => {
+    this.setState((prevState) => ({
+      userProfileIsOpen: true,
+      menuBarClickedButton: 4,
+      menuBarModalIsOpen: false,
+      eventViewerIsOpen: false,
+    }));
   };
 
   handleFilterValue = (filter, data) => {
@@ -117,7 +133,9 @@ class App extends Component {
   handleSearchByFilters = async () => {
     try {
       const { searchFilters } = this.state;
-      const filteredEvents = await EventServices.getEventsByFilters(searchFilters);
+      const filteredEvents = await EventServices.getEventsByFilters(
+        searchFilters
+      );
       this.setState({
         filteredEvents,
         showFilteredEvents: true,
@@ -138,33 +156,27 @@ class App extends Component {
       eventViewerIsOpen,
       showFilteredEvents,
       filteredEvents,
+      userProfileIsOpen,
     } = this.state;
 
     return (
       <div className="App">
         <div className="App-topbar">
-          <h1>Daily Yachay</h1>
+          <h1 className="App-title">Daily Yachay</h1>
 
           <div className="App-topbar-buttons">
-            {/* <button
-              className="create-event-button"
-              onClick={this.toggleCreateEventModal}
-            >
-              <FontAwesomeIcon icon={faPlus} />
-            </button>
-            {createEventModalIsOpen && (
-              <EventForm
-                isOpen={createEventModalIsOpen}
-                toggle={this.toggleCreateEventModal}
-              />
-            )} */}
-
             <button className="profile-button" onClick={this.toggleLoginModal}>
-              <FontAwesomeIcon icon={faUser} />
+              {/* <FontAwesomeIcon icon={faUser} /> */}
+              Iniciar Sesion
             </button>
             {loginModalIsOpen && (
               <Login isOpen={loginModalIsOpen} toggle={this.toggleLoginModal} />
             )}
+
+            <button className="profile-button" onClick={this.toggleLoginModal}>
+              {/* <FontAwesomeIcon icon={faUser} /> */}
+              Registrarse
+            </button>
           </div>
         </div>
 
@@ -179,6 +191,7 @@ class App extends Component {
             searchFilters={this.state.searchFilters}
             handleFilterValue={this.handleFilterValue}
             handleSearchByFilters={this.handleSearchByFilters}
+            handleProfileButton={this.handleProfileButton}
           />
         </div>
 
@@ -188,6 +201,8 @@ class App extends Component {
             filteredEvents={filteredEvents}
           />
         ) : null}
+
+        {userProfileIsOpen ? <UserProfile /> : null}
       </div>
     );
   }

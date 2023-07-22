@@ -102,9 +102,12 @@ class EventViewer extends Component {
     const { showFilteredEvents, filteredEvents } = this.props;
 
     return (
-      <div className="d-flex align-items-center justify-content-center">
+      <div
+        className="d-flex align-items-center justify-content-center mt-3"
+        style={{ marginLeft: "150px"}}
+      >
         {showFilteredEvents && (
-          <div className="col-7 event-viewer">
+          <div className="col-8 event-viewer">
             {filteredEvents.map((event) => (
               <EventCard
                 key={event.id}
@@ -130,19 +133,19 @@ class EventViewer extends Component {
                 id={1}
                 handleClick={this.handleClick}
                 clickedButton={clickedButton}
-                text="Previous Events"
+                text="Eventos Previos"
               />
               <TabButton
                 id={2}
                 handleClick={this.handleClick}
                 clickedButton={clickedButton}
-                text="Today Events"
+                text="Eventos de hoy"
               />
               <TabButton
                 id={3}
                 handleClick={this.handleClick}
                 clickedButton={clickedButton}
-                text="Future Events"
+                text="Eventos Futuros"
               />
             </div>
 
