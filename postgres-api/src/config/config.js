@@ -17,6 +17,10 @@ const config = {
   googleClientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
   googleOauthRedirect: process.env.GOOGLE_OAUTH_REDIRECT_UR,
+
+  // Jsonwebtoken
+  wtSecretKey: process.env.JWT_SECRET_KEY,
+
 }
 
 // S3 AMAZON 

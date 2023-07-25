@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import EventServices from "./services/events.services";
 import EventViewer from "./components/EventViewer";
-import Login from "./components/Login";
+import LoginPage from "./components/Login";
 import MenuBar from "./components/MenuBar";
 import UserProfile from "./components/UserProfile";
 
@@ -60,11 +60,7 @@ class App extends Component {
     });
   };
 
-  toggleLoginModal = () => {
-    this.setState((prevState) => ({
-      loginModalIsOpen: !prevState.loginModalIsOpen,
-    }));
-  };
+
 
   toggleMenuModal = (buttonId) => {
     this.setState((prevState) => {
@@ -165,18 +161,7 @@ class App extends Component {
           <h1 className="App-title">Daily Yachay</h1>
 
           <div className="App-topbar-buttons">
-            <button className="profile-button" onClick={this.toggleLoginModal}>
-              {/* <FontAwesomeIcon icon={faUser} /> */}
-              Iniciar Sesion
-            </button>
-            {loginModalIsOpen && (
-              <Login isOpen={loginModalIsOpen} toggle={this.toggleLoginModal} />
-            )}
-
-            <button className="profile-button" onClick={this.toggleLoginModal}>
-              {/* <FontAwesomeIcon icon={faUser} /> */}
-              Registrarse
-            </button>
+            <LoginPage/>
           </div>
         </div>
 

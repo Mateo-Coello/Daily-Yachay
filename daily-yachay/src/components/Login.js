@@ -1,31 +1,63 @@
-import React, { useState } from "react";
-import { Modal, ModalHeader, ModalBody } from "reactstrap";
-import EventServices from "../services/events.services";
-import { ReactComponent as GoogleLogo } from '../assets/google.svg';
+import React, { useEffect, useState } from "react";
 import "../styles/login.css";
+import googleOneTap from "google-one-tap";
 
-const LoginPage = ({ isOpen, toggle }) => {
+const options = {
+  client_id: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
+  auto_select: false,
+  cancel_on_tap_outside: false,
+  context: "use",
+};
 
+const LoginPage = () => {
+  const [loginData, setLoginData] = useState(
+    localStorage.getItem("loginData")
+      ? JSON.parse(localStorage.getItem("loginData"))
+      : null
+  );
 
+  useEffect(() => {
+    if (!loginData) {
+      googleOneTap(options, async (response) => {
+        const res = await fetch("http://localhost:4000/oauth/google-login", {
+          method: "POST",
+          body: JSON.stringify({
+            token: response.credential,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-  const handleGoogleLogin = () => {
-    const googleUrl = EventServices.getGoogleUrl("from"); 
-    window.location.href = googleUrl;
+        const data = await res.json();
+        setLoginData(data);
+        localStorage.setItem("loginData", JSON.stringify(data));
+      });
+    }
+  }, [loginData]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("loginData");
+    setLoginData(null);
   };
 
   return (
-    <Modal isOpen={isOpen} toggle={toggle} centered>
-      <ModalHeader toggle={toggle}>Iniciar sesión</ModalHeader>
-      <ModalBody>
-
-            <div className="button-container">
-              <button onClick={handleGoogleLogin} className="btn btn-success">
-                <GoogleLogo className="google-logo" /> Iniciar sesión o registrarse con Google
-              </button>
-            </div>
-      </ModalBody>
-    </Modal>
+    <div className="button-container">
+      {loginData ? (
+        <div>
+          <h3>
+            Welcome "{loginData.firstName}"! You are logged in as {loginData.email}
+          </h3>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      ) : (
+        <div>
+          <h3>Not logged in</h3>
+          
+        </div>
+      )}
+    </div>
   );
-}
+};
 
 export default LoginPage;

@@ -46,10 +46,16 @@ const UsersSchema = {
       field: 'email'
     },
     bday:{
-        allowNull:false,
+        allowNull:true,
         type: DataTypes.DATEONLY,
         field: 'bday'
+    },    
+    user_profile_pic:{
+        allowNull:true,
+        type: DataTypes.STRING(400),
+        field: 'user_profile_pic'
     }
+
 }
   
 module.exports = { Users, UsersSchema };
