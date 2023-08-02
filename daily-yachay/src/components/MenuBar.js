@@ -24,7 +24,10 @@ class MenuBar extends Component {
       handleFilterValue,
       handleSearchByFilters,
       handleProfileButton,
+      user,
     } = this.props;
+
+    const userPicture = user ? user.user_profile_pic : "../images/default-profile-pic.jpg";
 
     return (
       <div className={menuModalIsOpen ? "menu-bar active" : "menu-bar"}>
@@ -76,7 +79,7 @@ class MenuBar extends Component {
             onClick={() => handleProfileButton()}
           >
             <img
-              src="/images/default-profile-pic.jpg"
+              src={userPicture}
               alt="/images/default-profile-pic.jpg"
             />
             <span style={{ marginLeft: "10px" }}>Perfil</span>

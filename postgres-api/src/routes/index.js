@@ -1,5 +1,6 @@
 const express = require('express'); 
 
+
 const usersRouter = require('./users.router');
 const eventsRouter = require('./events.router');
 const commentsRouter = require('./comments.router');
@@ -16,7 +17,7 @@ function routerApi(app) {
   router.use('/comments', commentsRouter);
   router.use('/enrollees', enrolleesRouter);
   router.use('/covers', eventCoversRouter);
-  router.use('/oauth', googleAuthRouter);
+  router.use('/google', googleAuthRouter);
 }
 
 module.exports = routerApi;

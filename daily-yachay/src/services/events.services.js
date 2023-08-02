@@ -1,7 +1,14 @@
 import axios from "axios";
 
+function getTokenFromCookie() {
+  const tokenCookie = document.cookie.split("; ").find((cookie) => cookie.startsWith("token="));
+  return tokenCookie ? tokenCookie.split("=")[1] : null;
+}
+
 
 class EventServices {
+  static baseURL = 'http://localhost:4000'; 
+
   static getEventsByFilters = async (searchFilters) => {
     try {
       const { title, organizer, category, location, endDate, startDate } =
@@ -17,39 +24,21 @@ class EventServices {
     }
   };
 
+  
   static createEvent = async (postData) => {
     try {
-      const response = await axios.post('http://127.0.0.1:4000/events/', postData);
-      console.log('Event created:', response.data);
+      const token = getTokenFromCookie(); 
+      const headers = {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      };
+
+      const response = await axios.post(`${EventServices.baseURL}/events/create`, postData, { headers });
+      console.log('Event created:', response.data.success);
     } catch (error) {
-      throw new Error('Failed to create event. Please try again.'); // Throw custom error message
+      throw new Error('Failed to create event. Please try again.'); 
     }
   };
-
-
-  // GOOGLE OAUTH
-
-  static getGoogleUrl = (from) => {
-    const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`;
-  
-    const options = {
-      redirect_uri: process.env.REACT_APP_GOOGLE_OAUTH_REDIRECT,
-      client_id: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
-      access_type: 'offline',
-      response_type: 'code',
-      prompt: 'consent',
-      scope: [
-        'https://www.googleapis.com/auth/userinfo.profile',
-        'https://www.googleapis.com/auth/userinfo.email',
-      ].join(' '),
-      state: from,
-    };
-  
-    const qs = new URLSearchParams(options);
-  
-    return `${rootUrl}?${qs.toString()}`; 
-  };
-
 }
 
 

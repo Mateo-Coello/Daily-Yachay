@@ -98,9 +98,8 @@ class EventViewer extends Component {
   };
 
   render() {
-    const { showTabs, tab, clickedButton } = this.state.tabs;
-    const { showFilteredEvents, filteredEvents } = this.props;
-
+    const { showTabs, tab, clickedButton} = this.state.tabs;
+    const { showFilteredEvents, filteredEvents, user } = this.props;
     return (
       <div
         className="d-flex align-items-center justify-content-center mt-3"
@@ -111,7 +110,7 @@ class EventViewer extends Component {
             {filteredEvents.map((event) => (
               <EventCard
                 key={event.id}
-                eventID={event.id}
+                eventID={filteredEvents}
                 eventTitle={event.title}
                 eventOrganizer={event.organizer}
                 eventExhibitor={event.exhibitors}
@@ -120,12 +119,12 @@ class EventViewer extends Component {
                 eventStartTime={new Date(`2000-01-01 ${event.start_hour}`)}
                 eventEndTime={new Date(`2000-01-01 ${event.end_hour}`)}
                 eventSummary={event.description}
-                eventCoverPath="/images/yachay.jpg"
+                eventCoverPath={"/images/yachay.jpg"}
+                user={user}
               />
             ))}
           </div>
         )}
-
         {showTabs && !showFilteredEvents && (
           <div className="col-7 event-viewer">
             <div className="d-flex tab-buttons">
@@ -152,13 +151,13 @@ class EventViewer extends Component {
             <div className="section-separator"></div>
 
             <div className={tab === 1 ? "show-content" : "content"}>
-              {tab === 1 && <EventList route="previous" />}
+              {tab === 1 && <EventList route="previous" user={user} />}
             </div>
             <div className={tab === 2 ? "show-content" : "content"}>
-              {tab === 2 && <EventList route="today" />}
+              {tab === 2 && <EventList route="today" user={user}/>}
             </div>
             <div className={tab === 3 ? "show-content" : "content"}>
-              {tab === 3 && <EventList route="future" />}
+              {tab === 3 && <EventList route="future" user={user} />}
             </div>
           </div>
         )}

@@ -16,15 +16,15 @@ async function getEventsByRoute(route, currentDate) {
 }
 
 // Funcion renderizadora usando el componente Eventcard
-export const EventList = ({ route }) => {
+export const EventList = ({ route, user } ) => {
   const [events, setEvents] = useState([]);
   const [currentDate, setCurrentDate] = useState('');
+
 
   useEffect(() => {
     const today = new Date();
     const options = { timeZone: 'America/Guayaquil' }; // Configura la zona horaria de Ecuador
     const formattedDate = today.toLocaleDateString('es-EC', options).split('/').reverse().join('-');
-    console.log(formattedDate);
     setCurrentDate(formattedDate);
 
     getEventsByRoute(route, currentDate)
@@ -51,6 +51,8 @@ export const EventList = ({ route }) => {
           eventEndTime={new Date(`2000-01-01 ${event.end_hour}`)}
           eventSummary={event.description}
           eventCoverPath="/images/yachay.jpg"
+          user={user}
+          
         />
       ))}
     </div>

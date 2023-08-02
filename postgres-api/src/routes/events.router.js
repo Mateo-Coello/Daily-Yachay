@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router(); 
 const eventsController = require('../controllers/events.controller');
+// Middleware
+const auth = require('../controllers/googleAuth.controller');
 
 router
   .get("/:id", eventsController.getEventById)
@@ -15,7 +17,7 @@ router
   .get("/organizer/:organizer", eventsController.getEventsByOrganizer)
   .get("/category/:category", eventsController.getEventsByCategory)
   .get("/location/:location", eventsController.getEventsByLocation)
-  .post("/", eventsController.createEvent)
+  .post("/create",auth.authenticateUserMiddleware, eventsController.createEvent)
   .put("/:id", eventsController.updateEvent)
   .delete("/:id", eventsController._deleteEvent);
 

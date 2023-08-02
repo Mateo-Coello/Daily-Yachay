@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const googleAuthController = require('../controllers/googleAuth.controller');
+const create = require('../controllers/createUserWithGoogle');
+// Middleware
+const auth = require('../controllers/googleAuth.controller');
 
-router.post('/google-login', googleAuthController.createUserWithGoogle);
+router
+    .post('/auth', auth.authenticateUserMiddleware)
+    .post('/login', auth.authenticateUserMiddleware, create.createUserWithGoogle);
+
 
 module.exports = router;

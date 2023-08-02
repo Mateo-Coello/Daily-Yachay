@@ -8,8 +8,11 @@ import EventViewer from "./components/EventViewer";
 import LoginPage from "./components/Login";
 import MenuBar from "./components/MenuBar";
 import UserProfile from "./components/UserProfile";
+import axios from "axios";
 
 class App extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -18,6 +21,7 @@ class App extends Component {
       menuBarClickedButton: 1,
       menuBarModalIsOpen: false,
       createEventModalIsOpen: false,
+      user:null,
       userProfileIsOpen: false,
       searchFilters: {
         title: "",
@@ -32,6 +36,46 @@ class App extends Component {
     };
   }
 
+  static baseURL = process.env.REACT_APP_BACKEND_HOST;
+
+  // Automatic auth user
+  logout = () => {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.reload(false);
+  };
+
+  componentDidMount() {
+    const tokenCookie = document.cookie.split("; ").find(cookie => cookie.startsWith("token="));
+    if (tokenCookie) {
+      const token = tokenCookie.split("=")[1];
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
+
+
+    axios.post(`${App.baseURL}/google/login`)
+      .then(response => {
+        this.setState((prevState) => ({
+          user: response.data,
+        }));
+        console.log(this.state.user);
+      })
+      .catch(error => {
+        console.log("Error al obtener los datos del usuario:", error);
+      });
+    } 
+
+    axios.interceptors.response.use(
+      response => response,
+      error => {
+        if (error.response?.status === 401) 
+        this.logout(); 
+        return Promise.reject(error);
+      }
+    );
+  }
+
+  
+  
   toggleCreateEventModal = () => {
     this.setState((prevState) => {
       const {
@@ -146,15 +190,14 @@ class App extends Component {
   render() {
     const {
       createEventModalIsOpen,
-      loginModalIsOpen,
       menuBarClickedButton,
       menuBarModalIsOpen,
       eventViewerIsOpen,
       showFilteredEvents,
       filteredEvents,
       userProfileIsOpen,
+      user,
     } = this.state;
-
     return (
       <div className="App">
         <div className="App-topbar">
@@ -177,6 +220,7 @@ class App extends Component {
             handleFilterValue={this.handleFilterValue}
             handleSearchByFilters={this.handleSearchByFilters}
             handleProfileButton={this.handleProfileButton}
+            user={user}
           />
         </div>
 
@@ -184,6 +228,7 @@ class App extends Component {
           <EventViewer
             showFilteredEvents={showFilteredEvents}
             filteredEvents={filteredEvents}
+            user={user}
           />
         ) : null}
 

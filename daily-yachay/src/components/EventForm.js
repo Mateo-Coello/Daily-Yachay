@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import '../styles/event-card.css';
 import EventServices from "../services/events.services";
+import UserServices from '../services/users.services';
+import CoversServices from '../services/covers.services'; 
+
 import {
   Button,
   Modal,
@@ -36,6 +39,8 @@ class EventForm extends Component {
         avail_places: null,
         recur_event: false,
       },
+      coverImgFiles: [], // Estado para almacenar las imágenes seleccionadas
+      uploadedUrls: [], // Estado para almacenar las URLs de las imágenes subidas
     };
   }
 
@@ -61,21 +66,49 @@ class EventForm extends Component {
       },
     }));
   };
-
-  handleCreateEvent = () => {
-    const event_id = EventForm.generateUniqueId();
   
+  
+
+
+
+  handleCoverImgChange = (e) => {
+    const files = Array.from(e.target.files);
+    console.log(files); // Agregar esta línea para verificar los archivos seleccionados
+    this.setState({ coverImgFiles: files });
+  };
+  
+
+
+
+   // Manejador para subir las imágenes a S3
+   handleUploadImages = async () => {
+    console.log(this.state.coverImgFiles); // Agregar esta línea para verificar los archivos antes de cargarlos
+    const uploadPromises = this.state.coverImgFiles.map((file) => CoversServices.uploadFileToS3(file));
+    try {
+      const uploadedUrls = await Promise.all(uploadPromises);
+      this.setState({ uploadedUrls });
+    } catch (error) {
+      console.error('Error uploading images:', error.message);
+    }
+  };
+
+
+
+  handleCreateEvent = async () => {
+    const event_id =  EventForm.generateUniqueId();
+    const userResponse = await UserServices.getUsersByEmail();   
+    console.log(userResponse.id);
     this.setState(
       (prevState) => ({
         postData: {
           ...prevState.postData,
           id: event_id,
-          u_id: "U1",
+          u_id: userResponse.id,
+
         },
       }),
       async () => {
         console.log(this.state.postData);
-  
         try {
           await EventServices.createEvent(this.state.postData);
           // Additional logic or state updates upon successful event creation
@@ -87,9 +120,11 @@ class EventForm extends Component {
     );
   };
 
+
+
   render() {
     const { isOpen, toggle } = this.props;
-    const { postData } = this.state;
+    const { postData, coverImgFiles, uploadedUrls } = this.state;
 
     return (
       <Modal isOpen={isOpen} toggle={toggle} size="lg" scrollable centered>
@@ -275,16 +310,27 @@ class EventForm extends Component {
 
             <FormGroup>
               <Label for="event-coverImg">Portada</Label>
-              <Input type="file" id="event-coverImg" name="coverImg" />
+              <Input
+                type="file"
+                id="event-coverImg"
+                name="coverImg"
+                multiple onChange={this.handleCoverImgChange}
+              />
               {/* <FormText>
-                Asegúrate que la imagen tenga una resolución de al menos 400x500 pixeles.
+                Asegúrate que las imágenes tengan una resolución de al menos 400x500 pixeles.
               </FormText> */}
             </FormGroup>
           </Form>
         </ModalBody>
-
         <ModalFooter>
-          <Button color="success" onClick={this.handleCreateEvent}>
+          <Button color="primary" onClick={this.handleUploadImages}>
+            Subir Imágenes
+          </Button>
+          <Button
+            color="success"
+            onClick={this.handleCreateEvent}
+            disabled={uploadedUrls.length === 0}
+          >
             Agregar Evento
           </Button>
         </ModalFooter>

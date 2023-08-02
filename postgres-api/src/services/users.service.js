@@ -9,8 +9,9 @@ class UsersService {
       return res;
     }
 
-    async findOne(id) {
-      const res = await models.Users.findByPk(id);
+    async findOne(email) {
+      const res = await models.Users.findOne({where: { email: email } });
+      console.log(res);
       return res;
     }
 

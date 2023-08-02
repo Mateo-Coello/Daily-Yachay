@@ -10,6 +10,9 @@ function setupModels(sequelize) {
     Comments.init(Comments_Schema, Comments.config(sequelize));
     Enrollees.init(Enrollees_Schema, Enrollees.config(sequelize));
     EventCovers.init(EventCovers_Schema, EventCovers.config(sequelize));
+
+    Comments.belongsTo(Users, { foreignKey: 'user_id', as: 'user' });
+    Users.hasMany(Comments, { foreignKey: 'user_id', as: 'comments' });
 }
 
 module.exports = setupModels;

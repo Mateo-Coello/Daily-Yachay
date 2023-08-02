@@ -17,6 +17,8 @@ const UsersSchema = {
     id: {
         allowNull: false,
         primaryKey: true,
+        defaultValue: Sequelize.literal(`'U' || nextval('seq_u_naturales')`),
+        autoIncrement: true,
         type: DataTypes.STRING(20),
         field:'id'
     },

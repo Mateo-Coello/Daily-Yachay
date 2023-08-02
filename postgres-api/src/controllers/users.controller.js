@@ -19,10 +19,11 @@ const getUsers = async ( req, res ) => {
     }
 }
 
-const getUserById = async ( req, res ) => {
+
+const getUserProfile = async ( req, res ) => {
     try {
-        const { id } = req.params;
-        const response = await service.findOne(id);
+        const {email} = req.user;
+        const response = await service.findOne(email);
         res.json(response);
     } catch (error) {
         res.status(500).send({ success: false, message: error.message });
@@ -51,5 +52,5 @@ const _deleteUser = async (req, res) => {
 }
 
 module.exports = {
-    createUser, getUsers, getUserById, updateUser, _deleteUser
+    createUser, getUsers, getUserProfile, updateUser, _deleteUser
 };

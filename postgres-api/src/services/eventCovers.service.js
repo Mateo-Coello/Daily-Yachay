@@ -13,6 +13,8 @@ class EventCoversService {
     return res;
   }
 
+  
+
   async update(id, data) {
     const model = await this.findOne(id);
     const res = await model.update(data);

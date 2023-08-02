@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "../styles/login.css";
 import googleOneTap from "google-one-tap";
 
@@ -10,52 +10,80 @@ const options = {
 };
 
 const LoginPage = () => {
-  const [loginData, setLoginData] = useState(
-    localStorage.getItem("loginData")
-      ? JSON.parse(localStorage.getItem("loginData"))
-      : null
-  );
 
   useEffect(() => {
-    if (!loginData) {
+    
+    const saveCredentialToCookie = async () => {
       googleOneTap(options, async (response) => {
-        const res = await fetch("http://localhost:4000/oauth/google-login", {
+        const token = response.credential;
+
+        try {
+          document.cookie = `token=${token}; path=/`;
+          window.location.reload(false);
+
+          const res = await fetch("http://localhost:4000/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}` 
+            },
+            body: JSON.stringify({ token }), 
+          });
+
+          const data = await res.json();
+          console.log(data); 
+        } catch (error) {
+          console.error("Error al registrar el usuario:", error.message);
+        }
+      });
+    };
+
+    const tokenCookie = document.cookie
+      .split("; ")
+      .find((cookie) => cookie.startsWith("token="));
+
+    if (!tokenCookie) {
+      saveCredentialToCookie();
+    }
+  }, []);
+
+  const handleOpenOneTap = () => {
+    // Función para abrir el Google One Tap
+    googleOneTap(options, async (response) => {
+      const token = response.credential;
+
+      try {
+        // Guardar el token en una cookie con una duración de sesión
+        document.cookie = `token=${token}; path=/`;
+
+        // Realizar una solicitud POST a la ruta '/create_user/new' para registrar el usuario si no existe
+        const res = await fetch("http://localhost:4000/google/login", {
           method: "POST",
-          body: JSON.stringify({
-            token: response.credential,
-          }),
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}` // Incluir el token en el encabezado Authorization
           },
+          body: JSON.stringify({ token }), // Enviar el token como parte del cuerpo de la solicitud
         });
 
         const data = await res.json();
-        setLoginData(data);
-        localStorage.setItem("loginData", JSON.stringify(data));
-      });
-    }
-  }, [loginData]);
+        console.log(data); // Puedes hacer algo con la respuesta si lo deseas
+      } catch (error) {
+        console.error("Error al registrar el usuario:", error.message);
+      }
+    });
+  };
+
 
   const handleLogout = () => {
-    localStorage.removeItem("loginData");
-    setLoginData(null);
+      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      window.location.reload(false);  
   };
 
   return (
     <div className="button-container">
-      {loginData ? (
-        <div>
-          <h3>
-            Welcome "{loginData.firstName}"! You are logged in as {loginData.email}
-          </h3>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      ) : (
-        <div>
-          <h3>Not logged in</h3>
-          
-        </div>
-      )}
+      <button onClick={handleOpenOneTap}>Open Google One Tap</button>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };

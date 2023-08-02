@@ -30,7 +30,7 @@ const Comments_Schema = {
     id: {
         allowNull: false,
         primaryKey: true,
-        type: DataTypes.STRING(10),
+        type: DataTypes.STRING(50),
         field:'id'
     },
     e_id: {

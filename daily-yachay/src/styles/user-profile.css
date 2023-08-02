@@ -14,10 +14,10 @@
 }
 
 .user-pic img {
-  width: 200px;
-  height: 200px;
+  max-height: 200px;
   border-radius: 50%;
   object-fit: cover;
+  border: solid rgb(98, 98, 98) 1px;
 }
 
 .user-info-content {

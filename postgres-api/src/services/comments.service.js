@@ -1,8 +1,20 @@
 const { models } = require('../libs/sequelize');
+const { Op } = require('sequelize')
 
 class CommentsService { 
   
     constructor() {}
+
+    
+    async create(data) {
+      const res = await models.Comments.create(data);
+
+      const user = await models.Users.findByPk(data.u_id);
+
+      res.dataValues.user=user;
+      
+      return res;
+    }
 
     async findCommentsByEventId(e_id) {
       const res = await models.Comments.findAll({
@@ -20,10 +32,10 @@ class CommentsService {
       return res;
     }  
 
-    async findChildrenComments(id, e_id) {
+    async findChildrenComments(e_id) {
       const res = await models.Comments.findAll({
         where: {
-          parent_id: id,
+          parent_id: { [Op.not]: null },
            e_id: e_id
         },
         include: [
@@ -33,23 +45,21 @@ class CommentsService {
           }
         ]
       });
-      return res
-    }
-
-    async create(data) {
-      const res = await models.Events.create(data);
+      console.log(res);
       return res;
     }
 
+
+
     async update(id, data) {
-      const model = await this.findOne(id);
+      const model = await model.Comments.findOne(id);
       const res = await model.update(data);
       return res;
     }
 
     async delete(id) {
-      const model = await this.findOne(id);
-      await model.destroy();
+      const comment = await models.Comments.findOne({where: { id: id } });
+        comment.destroy();
       return { deleted: true };
     }
   

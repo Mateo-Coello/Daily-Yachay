@@ -167,6 +167,7 @@ class EventsService {
     return res;
   }
 
+
   async delete(id) {
     const model = await models.Events.findByPk(id);
     await model.destroy();

@@ -17,6 +17,7 @@ const getEventCovers = async (req, res) => {
   }
 };
 
+
 const addCover = async (req, res) => {
   try {
     const { eventId, imagePath } = req.body;
@@ -39,6 +40,8 @@ const addCover = async (req, res) => {
   }
 };
 
+
+
 const updateCover = async (req, res) => {
   try {
     const { id } = req.params;
@@ -60,7 +63,7 @@ const deleteCover = async (req, res) => {
     const data = await s3
       .deleteObject({
         Bucket: 'dailyyachayimagenes',
-        Key: `covers/${coverId}`
+        Key: `covers/${coverId}`,
       })
       .promise();
 

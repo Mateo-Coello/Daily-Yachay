@@ -31,6 +31,10 @@ class EventCard extends Component {
   };
 
   render() {
+
+    const { reminder, register, registerButtonText, activeTab, isEventOpen } =
+    this.state;
+
     const {
       eventID,
       eventTitle,
@@ -42,11 +46,10 @@ class EventCard extends Component {
       eventLocation,
       eventSummary,
       eventCoverPath,
+      user,
     } = this.props;
 
-    const { reminder, register, registerButtonText, activeTab, isEventOpen } =
-      this.state;
-
+    console.log(this.props);
     return (
       <div className="event-container" onClick={() => this.toggleEventModal()}>
         <h1>{eventTitle}</h1>
@@ -170,7 +173,7 @@ class EventCard extends Component {
                     <p>{eventSummary}</p>
                   </TabPane>
                   <TabPane tabId="3">
-                    <CommentsSection eventID={eventID} />
+                    <CommentsSection eventID={eventID} user={user} />
                   </TabPane>
                 </TabContent>
               </div>
