@@ -20,9 +20,9 @@ class CommentServices {
     static getComments = async (event_id) => {
         try {
             const response = await axios.get(`${CommentServices.baseURL}/comments/${event_id}`);
-            return response.data;
+            return response;
         } catch (error) {
-          throw new Error("Error al obtener los comentarios:" + error.message);
+          throw new Error("Error al obtener los comentarios hijos:" + error.message);
 
         }
     }

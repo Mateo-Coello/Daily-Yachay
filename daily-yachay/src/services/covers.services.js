@@ -18,7 +18,7 @@ class CoversServices {
   });
 
 
-  
+
   static getCoversFromServer = async (event_id) => {
     try {
       const response = await axios.get(`${CoversServices.baseURL}/covers/${event_id}`);

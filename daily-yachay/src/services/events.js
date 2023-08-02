@@ -50,7 +50,6 @@ export const EventList = ({ route, user } ) => {
           eventStartTime={new Date(`2000-01-01 ${event.start_hour}`)}
           eventEndTime={new Date(`2000-01-01 ${event.end_hour}`)}
           eventSummary={event.description}
-          eventCoverPath="/images/yachay.jpg"
           user={user}
           
         />
@@ -59,48 +58,6 @@ export const EventList = ({ route, user } ) => {
   );
 };
 
-// async function getEventsByFilters({title, organizer, category, location, endDate, startDate}) {
-//   try {
-//     const response = await axios.get(`http://127.0.0.1:4000/events/filters/ttl=${title}/org=${organizer}/cat=${category}/loc=${location}/startD=${startDate}/endD=${endDate}`);
-//     return response.data;
-//   } catch (error) {
-//     throw new Error(error.message);
-//   }
-// }
-
-// export const eventListByFilters = (searchFilters) => {
-//   const [events, setEvents] = useState([]);
-
-//   useEffect(() => {
-//     getEventsByFilters(searchFilters)
-//       .then(data => {
-//         setEvents(data);
-//       })
-//       .catch(error => {
-//         console.error(error);
-//       });
-//   }, searchFilters);
-
-//   return (
-//     <div>
-//       {events.map(event => (
-//         <EventCard
-//           key={event.id}
-//           eventID={event.id}
-//           eventTitle={event.title}
-//           eventOrganizer={event.organizer}
-//           eventExhibitor={event.exhibitors}
-//           eventLocation={event.location}
-//           eventDate={new Date(event.date + 'T00:00:00')}
-//           eventStartTime={new Date(`2000-01-01 ${event.start_hour}`)}
-//           eventEndTime={new Date(`2000-01-01 ${event.end_hour}`)}
-//           eventSummary={event.description}
-//           eventCoverPath="/images/yachay.jpg"
-//         />
-//       ))}
-//     </div>
-//   );
-// };
 
 async function getMappedEventsByOrganizer(organizer) {
   try {
@@ -152,7 +109,6 @@ export const EventList_Organizer = ({ organizer }) => {
           eventStartTime={event.startTime}
           eventEndTime={event.endTime}
           eventSummary={event.summary}
-          eventCoverPath="/images/yachay.jpg"
         />
       ))}
     </div>

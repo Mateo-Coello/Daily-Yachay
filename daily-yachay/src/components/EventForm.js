@@ -125,6 +125,7 @@ class EventForm extends Component {
               cover_path: url,
             };
             await CoversServices.sendCoverUrlsToServer(coverData);
+            window.location.reload(false);
           }
         } catch (error) {
           console.error("Error creating event:", error.message);

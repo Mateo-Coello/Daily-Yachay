@@ -152,7 +152,6 @@ class UserProfile extends Component {
                         eventStartTime={new Date(`2000-01-01 ${event.start_hour}`)}
                         eventEndTime={new Date(`2000-01-01 ${event.end_hour}`)}
                         eventSummary={event.description}
-                        eventCoverPath="/images/yachay.jpg"
                       />
                     ))}
                   </div>
@@ -173,7 +172,6 @@ class UserProfile extends Component {
                         eventStartTime={new Date(`2000-01-01 ${event.start_hour}`)}
                         eventEndTime={new Date(`2000-01-01 ${event.end_hour}`)}
                         eventSummary={event.description}
-                        eventCoverPath="/images/yachay.jpg"
                       />
                     ))}
                   </div>

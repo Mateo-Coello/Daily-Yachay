@@ -3,10 +3,9 @@ import '../styles/event-card.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import CommentsSection from "./Comments.js";
-import { Nav, NavItem, NavLink, TabContent, TabPane, Modal } from "reactstrap";
+import { Nav, NavItem, NavLink, TabContent, TabPane, Modal, Carousel, CarouselItem, CarouselControl, CarouselIndicators } from "reactstrap";
 import { format } from "date-fns";
 import CoversServices from '../services/covers.services';
-
 
 class EventCard extends Component {
   constructor(props) {
@@ -16,7 +15,10 @@ class EventCard extends Component {
       register: false,
       registerButtonText: "Inscribirse",
       activeTab: "1",
+      eventcovers: null,
       isEventOpen: false,
+      carouselImages: [], // Estado para almacenar las imágenes del carrusel
+      activeIndex: 0, // Estado para controlar la imagen activa en el carrusel
     };
   }
 
@@ -32,11 +34,43 @@ class EventCard extends Component {
     }));
   };
 
-  render() {
 
-    const { reminder, register, registerButtonText, activeTab, isEventOpen } =
-    this.state;
 
+  async componentDidMount() {
+    try {
+      const { eventID } = this.props;
+      const carouselImages = await CoversServices.getCoversFromServer(eventID);
+      console.log(carouselImages);
+      this.setState({ carouselImages });
+      
+    } catch (error) {
+      console.error('Error fetching covers from server:', error.message);
+    }
+  }
+
+  renderCarouselImages = () => {
+    const { carouselImages } = this.state;
+
+    return carouselImages.map((image, index) => (
+      <CarouselItem
+        key={index}
+        onExiting={() => this.setState({ animating: true })}
+        onExited={() => this.setState({ animating: false })}
+      >
+        <img src={image} style={{ objectFit:"fill"}} alt={`Slide ${index + 1}`} className="carousel-image" />
+      </CarouselItem>
+    ));
+  };
+
+
+
+   render() {
+    const { activeTab, isEventOpen, carouselImages, activeIndex, animating, register, reminder, registerButtonText
+    } = this.state;
+
+    const showCarousel = carouselImages.length > 0;
+
+    
     const {
       eventID,
       eventTitle,
@@ -47,11 +81,11 @@ class EventCard extends Component {
       eventEndTime,
       eventLocation,
       eventSummary,
-      eventCoverPath,
       user,
     } = this.props;
 
     console.log(this.props);
+
     return (
       <div className="event-container" onClick={() => this.toggleEventModal()}>
         <h1>{eventTitle}</h1>
@@ -180,8 +214,59 @@ class EventCard extends Component {
                 </TabContent>
               </div>
             </div>
-            <div style={{width: "55%"}}>
-              <img src={eventCoverPath} alt="/images/yachay.jpg" />
+
+            <div style={{ width: "65%" , objectFit:"contain"}}>
+
+              <div className="carousel-container" >
+                {showCarousel ? (
+                  <Carousel
+                    activeIndex={activeIndex}
+                    next={() => {
+                      if (!animating) {
+                        this.setState((prevState) => ({
+                          activeIndex:
+                            (prevState.activeIndex + 1) % carouselImages.length,
+                        }));
+                      }
+                    }}
+                    previous={() => {
+                      if (!animating) {
+                        this.setState((prevState) => ({
+                          activeIndex:
+                            (prevState.activeIndex -
+                              1 +
+                              carouselImages.length) %
+                            carouselImages.length,
+                        }));
+                      }
+                    }}
+                  >
+                    <CarouselIndicators
+                      items={carouselImages}
+                      activeIndex={activeIndex}
+                      onClickHandler={() => {}}
+                    />
+                    {this.renderCarouselImages()}
+                    <CarouselControl
+                      direction="prev"
+                      directionText="Previous"
+                      onClickHandler={() => {}}
+                    />
+                    <CarouselControl
+                      direction="next"
+                      directionText="Next"
+                      onClickHandler={() => {}}
+                    />
+                  </Carousel>
+                ) : (
+                  <img
+                    src={`${process.env.PUBLIC_URL}/images/yachay.jpg`}
+                    alt="Default Event Cover"
+                    className="default-cover-image"
+                  />
+                )}
+              </div>
+              
             </div>
           </div>
         </Modal>

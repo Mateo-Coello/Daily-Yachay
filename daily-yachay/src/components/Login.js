@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/login.css";
 import googleOneTap from "google-one-tap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignInAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
 const options = {
   client_id: process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID,
@@ -10,9 +12,9 @@ const options = {
 };
 
 const LoginPage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    
     const saveCredentialToCookie = async () => {
       googleOneTap(options, async (response) => {
         const token = response.credential;
@@ -25,13 +27,14 @@ const LoginPage = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}` 
+              Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ token }), 
+            body: JSON.stringify({ token }),
           });
 
           const data = await res.json();
-          console.log(data); 
+          console.log(data);
+          setIsLoggedIn(true); // Setear el estado a true cuando el usuario inicie sesión
         } catch (error) {
           console.error("Error al registrar el usuario:", error.message);
         }
@@ -42,7 +45,10 @@ const LoginPage = () => {
       .split("; ")
       .find((cookie) => cookie.startsWith("token="));
 
-    if (!tokenCookie) {
+    if (tokenCookie) {
+      // Si la cookie existe, setear el estado a true
+      setIsLoggedIn(true);
+    } else {
       saveCredentialToCookie();
     }
   }, []);
@@ -61,29 +67,37 @@ const LoginPage = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}` // Incluir el token en el encabezado Authorization
+            Authorization: `Bearer ${token}`, // Incluir el token en el encabezado Authorization
           },
           body: JSON.stringify({ token }), // Enviar el token como parte del cuerpo de la solicitud
         });
 
         const data = await res.json();
         console.log(data); // Puedes hacer algo con la respuesta si lo deseas
+        setIsLoggedIn(true); // Setear el estado a true cuando el usuario inicie sesión
       } catch (error) {
         console.error("Error al registrar el usuario:", error.message);
       }
     });
   };
 
-
   const handleLogout = () => {
-      document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      window.location.reload(false);  
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "g_state=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.reload(false);
   };
 
   return (
     <div className="button-container">
-      <button onClick={handleOpenOneTap}>Open Google One Tap</button>
-      <button onClick={handleLogout}>Logout</button>
+      {isLoggedIn ? (
+        <button className="custom2-button" onClick={handleLogout}>
+          <FontAwesomeIcon icon={faSignOutAlt} /> Salir
+        </button>
+      ) : (
+        <button className="custom-button" onClick={handleLogout}>
+          <FontAwesomeIcon icon={faSignInAlt} /> Iniciar sesión
+        </button>
+      )}
     </div>
   );
 };

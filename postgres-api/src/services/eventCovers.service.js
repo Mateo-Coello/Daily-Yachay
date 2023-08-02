@@ -10,13 +10,16 @@ class EventCoversService {
   }
 
 
-  
+
   async getCovers(eventId) {
-    const res = await models.Covers.findAll({ where: { 
-      e_id: eventId 
-    } });
-    return res;
+  try {
+    const covers = await models.EventCovers.findAll({ where: { e_id: eventId } });
+    return covers.map((cover) => cover.cover_path);
+  } catch (error) {
+    throw new Error("Error fetching covers from the database: " + error.message);
   }
+}
+
 
 
 
