@@ -41,6 +41,7 @@ class EventForm extends Component {
       },
       coverImgFiles: [], // Estado para almacenar las imágenes seleccionadas
       uploadedUrls: [], // Estado para almacenar las URLs de las imágenes subidas
+      previewUrls: [],
     };
   }
 
@@ -69,17 +70,23 @@ class EventForm extends Component {
   
   
 
-
-
   handleCoverImgChange = (e) => {
     const files = Array.from(e.target.files);
-    console.log(files); // Agregar esta línea para verificar los archivos seleccionados
-    this.setState({ coverImgFiles: files });
+    const maxImages = 5 - files.length; // Establecer el valor inicial de maxImages basado en la cantidad de imágenes seleccionadas
+    const previewUrls = files.map((file) => URL.createObjectURL(file)); // Obtener URL de las imágenes previas
+    this.setState({ coverImgFiles: files, previewUrls, maxImages });
   };
   
 
+  handleRemovePreview = (index) => {
+    const { previewUrls, coverImgFiles } = this.state;
+    const updatedUrls = previewUrls.filter((url, i) => i !== index);
+    const updatedFiles = coverImgFiles.filter((file, i) => i !== index);
+    this.setState({ previewUrls: updatedUrls, coverImgFiles: updatedFiles });
+  };
+  
 
-
+  
    // Manejador para subir las imágenes a S3
    handleUploadImages = async () => {
     console.log(this.state.coverImgFiles); // Agregar esta línea para verificar los archivos antes de cargarlos
@@ -124,7 +131,7 @@ class EventForm extends Component {
 
   render() {
     const { isOpen, toggle } = this.props;
-    const { postData, coverImgFiles, uploadedUrls } = this.state;
+    const { postData, coverImgFiles, uploadedUrls, previewUrls  } = this.state;
 
     return (
       <Modal isOpen={isOpen} toggle={toggle} size="lg" scrollable centered>
@@ -314,11 +321,27 @@ class EventForm extends Component {
                 type="file"
                 id="event-coverImg"
                 name="coverImg"
-                multiple onChange={this.handleCoverImgChange}
+                multiple
+                onChange={this.handleCoverImgChange}
               />
-              {/* <FormText>
-                Asegúrate que las imágenes tengan una resolución de al menos 400x500 pixeles.
-              </FormText> */}
+              {previewUrls.map((url, index) => (
+                <div key={index} className="preview-container">
+                  <img
+                    className="preview-image"
+                    src={url}
+                    alt={`Preview ${index + 1}`}
+                  />
+                  <button
+                    className="remove-button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      this.handleRemovePreview(index);
+                    }}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              ))}
             </FormGroup>
           </Form>
         </ModalBody>
