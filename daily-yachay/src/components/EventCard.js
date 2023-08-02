@@ -5,6 +5,8 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import CommentsSection from "./Comments.js";
 import { Nav, NavItem, NavLink, TabContent, TabPane, Modal } from "reactstrap";
 import { format } from "date-fns";
+import CoversServices from '../services/covers.services';
+
 
 class EventCard extends Component {
   constructor(props) {

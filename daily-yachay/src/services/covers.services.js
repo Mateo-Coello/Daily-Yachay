@@ -17,23 +17,37 @@ class CoversServices {
     params: { Bucket: S3_BUCKET },
   });
 
-  static getCoversFromServer = async () => {
+
+  
+  static getCoversFromServer = async (event_id) => {
     try {
-      const response = await axios.get(`${CoversServices.baseURL}/covers`);
+      const response = await axios.get(`${CoversServices.baseURL}/covers/${event_id}`);
       return response.data;
     } catch (error) {
       throw new Error("Error fetching covers from server: " + error.message);
     }
   };
 
+
+  
+  static sendCoverUrlsToServer = async (coverUrls) => {
+    try {
+      await axios.post(`${CoversServices.baseURL}/covers`, coverUrls);
+      console.log('URLs de las imágenes enviadas al servidor');
+    } catch (error) {
+      console.error('Error al enviar los URLs al servidor:', error.message);
+    }
+  }
+
+
   static uploadFileToS3(file) {
-    const newName = `${newname}_${file.name}`;
+    // const newName = `${newname}_${file.name}`;
     return new Promise((resolve, reject) => {
       const params = {
         ACL: "public-read",
         Body: file,
         Bucket: S3_BUCKET,
-        Key: `covers/${newName}`, // Usar el nuevo nombre del archivo
+        Key: `covers/${file.name}`, // Usar el nuevo nombre del archivo
         ContentType: "image/jpeg",
       };
 

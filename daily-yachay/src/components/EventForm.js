@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import '../styles/event-card.css';
+import React, { Component } from "react";
+import "../styles/event-card.css";
 import EventServices from "../services/events.services";
-import UserServices from '../services/users.services';
-import CoversServices from '../services/covers.services'; 
+import UserServices from "../services/users.services";
+import CoversServices from "../services/covers.services";
 
 import {
   Button,
@@ -67,8 +67,6 @@ class EventForm extends Component {
       },
     }));
   };
-  
-  
 
   handleCoverImgChange = (e) => {
     const files = Array.from(e.target.files);
@@ -76,7 +74,6 @@ class EventForm extends Component {
     const previewUrls = files.map((file) => URL.createObjectURL(file)); // Obtener URL de las imágenes previas
     this.setState({ coverImgFiles: files, previewUrls, maxImages });
   };
-  
 
   handleRemovePreview = (index) => {
     const { previewUrls, coverImgFiles } = this.state;
@@ -84,26 +81,24 @@ class EventForm extends Component {
     const updatedFiles = coverImgFiles.filter((file, i) => i !== index);
     this.setState({ previewUrls: updatedUrls, coverImgFiles: updatedFiles });
   };
-  
 
-  
-   // Manejador para subir las imágenes a S3
-   handleUploadImages = async () => {
+  // Manejador para subir las imágenes a S3
+  handleUploadImages = async () => {
     console.log(this.state.coverImgFiles); // Agregar esta línea para verificar los archivos antes de cargarlos
-    const uploadPromises = this.state.coverImgFiles.map((file) => CoversServices.uploadFileToS3(file));
+    const uploadPromises = this.state.coverImgFiles.map((file) =>
+      CoversServices.uploadFileToS3(file)
+    );
     try {
       const uploadedUrls = await Promise.all(uploadPromises);
       this.setState({ uploadedUrls });
     } catch (error) {
-      console.error('Error uploading images:', error.message);
+      console.error("Error uploading images:", error.message);
     }
   };
 
-
-
   handleCreateEvent = async () => {
-    const event_id =  EventForm.generateUniqueId();
-    const userResponse = await UserServices.getUsersByEmail();   
+    const event_id = EventForm.generateUniqueId();
+    const userResponse = await UserServices.getUsersByEmail();
     console.log(userResponse.id);
     this.setState(
       (prevState) => ({
@@ -111,14 +106,26 @@ class EventForm extends Component {
           ...prevState.postData,
           id: event_id,
           u_id: userResponse.id,
-
         },
       }),
       async () => {
         console.log(this.state.postData);
+
         try {
           await EventServices.createEvent(this.state.postData);
-          // Additional logic or state updates upon successful event creation
+
+          // Enviar los URLs de las imágenes al servidor
+          const { uploadedUrls, postData } = this.state;
+          for (let i = 0; i < uploadedUrls.length; i++) {
+            const url = uploadedUrls[i];
+            const cover_id = require('uuid').v4().slice(0, 5);
+            const coverData = {
+              cover_id,
+              e_id: postData.id,
+              cover_path: url,
+            };
+            await CoversServices.sendCoverUrlsToServer(coverData);
+          }
         } catch (error) {
           console.error("Error creating event:", error.message);
           // Additional error handling or state updates for error scenario
@@ -127,11 +134,9 @@ class EventForm extends Component {
     );
   };
 
-
-
   render() {
     const { isOpen, toggle } = this.props;
-    const { postData, coverImgFiles, uploadedUrls, previewUrls  } = this.state;
+    const { postData, coverImgFiles, uploadedUrls, previewUrls } = this.state;
 
     return (
       <Modal isOpen={isOpen} toggle={toggle} size="lg" scrollable centered>

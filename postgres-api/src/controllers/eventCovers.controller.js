@@ -1,10 +1,8 @@
-const { S3 } = require('aws-sdk');
-const fs = require('fs');
 const EventCoversService = require('../services/eventCovers.service');
-const { AWS } = require('../config/config');
+
 
 const service = new EventCoversService();
-const s3 = new S3(AWS); // Inicializa el cliente de AWS S3 con las credenciales de configuración
+
 
 const getEventCovers = async (req, res) => {
   try {
@@ -12,33 +10,20 @@ const getEventCovers = async (req, res) => {
     const response = await service.getCovers(eventId);
     res.json(response);
   } catch (error) {
-    console.error('Error al obtener las portadas:', error);
-    res.status(500).json({ error: 'Error al obtener las portadas' });
+    res.status(500).send({ success: false, message: error.message });
   }
 };
 
 
 const addCover = async (req, res) => {
   try {
-    const { eventId, imagePath } = req.body;
-
-    const uploadParams = {
-      Bucket: 'dailyyachayimagenes',
-      Key: `covers/${eventId}/${Date.now()}_${imagePath}`,
-      Body: fs.readFileSync(imagePath),
-      ContentType: 'image/jpeg'
-    };
-
-    const data = await s3.upload(uploadParams).promise();
-    const coverPath = data.Location;
-
-    const response = await service.create({ eventId, coverPath });
+    const response = await service.create(req.body);
     res.json({ success: true, data: response });
   } catch (error) {
-    console.error('Error al agregar la portada:', error);
-    res.status(500).json({ error: 'Error al agregar la portada' });
+    res.status(500).send({ success: false, message: error.message });
   }
 };
+
 
 
 
@@ -53,6 +38,8 @@ const updateCover = async (req, res) => {
     res.status(500).json({ error: 'Error al actualizar la portada' });
   }
 };
+
+
 
 const deleteCover = async (req, res) => {
   try {
