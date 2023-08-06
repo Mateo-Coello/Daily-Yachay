@@ -6,6 +6,7 @@ import "../styles/tabs.css";
 import TabButton from "./TabButton";
 import EventCard from "./EventCard";
 import UserServices from '../services/users.services';
+import EventServices from "../services/events.services";
 import { Row } from "reactstrap";
 
 
@@ -19,9 +20,10 @@ class UserProfile extends Component {
         lname: "",
         user_profile_pic: "",
         numberCreatedEvents: 0,
-        createdEvents: [],
+        createdEvents: null,
         numberEnrolledEvents: 0,
         enrolledEvents: [],
+        showCreatedEvents: true,
       },
       dataLoaded: false,
       tabs: {
@@ -38,13 +40,17 @@ class UserProfile extends Component {
     
       // Realizar una solicitud para obtener los datos del usuario
       const userResponse = await UserServices.getUsersByEmail();
-
+      // console.log(userResponse);
+      const userEvents = await EventServices.getUserEvents(userResponse.id);
+      console.log(userEvents);
+      // console.log(userEvents.data);
       // Actualizar el estado con los datos del usuario obtenidos
       this.setState({
         userInfo: {
           id: userResponse.id,
           name: userResponse.name,
           lname: userResponse.lname,
+          createdEvents: userEvents,
           user_profile_pic: userResponse.user_profile_pic,
           numberCreatedEvents: userResponse.numberCreatedEvents,
           createdEvents: userResponse.createdEvents,
@@ -74,11 +80,13 @@ class UserProfile extends Component {
       createdEvents,
       showEnrolledEvents,
       enrolledEvents,
+      userEvents,
     } = this.state.userInfo;
+
     const { userInfo } = this.state;
     const { Id, name, lname, user_profile_pic } = userInfo;
     const { dataLoaded } = this.state;
-
+  
     return (
       <div>
         {dataLoaded ? (

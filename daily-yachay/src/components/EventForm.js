@@ -109,7 +109,7 @@ class EventForm extends Component {
         },
       }),
       async () => {
-        console.log(this.state.postData);
+      
 
         try {
           await EventServices.createEvent(this.state.postData);
@@ -125,7 +125,7 @@ class EventForm extends Component {
               cover_path: url,
             };
             await CoversServices.sendCoverUrlsToServer(coverData);
-            window.location.reload(false);
+            alert("Evento creado exitosamente");
           }
         } catch (error) {
           console.error("Error creating event:", error.message);

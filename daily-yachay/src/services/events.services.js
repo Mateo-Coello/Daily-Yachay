@@ -39,6 +39,18 @@ class EventServices {
       throw new Error('Failed to create event. Please try again.'); 
     }
   };
+
+
+  static getUserEvents = async (u_id) => {
+    try {
+      const response = await axios.get(`${EventServices.baseURL}/events/${u_id}`);
+      return response.data;
+    } catch (error) {
+      throw new Error("Error fetching covers from server: " + error.message);
+    }
+  };
+
+
 }
 
 

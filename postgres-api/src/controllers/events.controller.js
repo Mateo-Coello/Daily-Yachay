@@ -11,10 +11,10 @@ const createEvent = async ( req, res ) => {
 }
 
 
-const getEventById = async ( req, res ) => {
+const getUserEvents = async ( req, res ) => {
     try {
-        const { id } = req.params;
-        const response = await service.findEvent(id);
+        const { u_id } = req.params;
+        const response = await service.getUserEvents(u_id);
         res.json(response);
     } catch (error) {
         res.status(500).send({ success: false, message: error.message });
@@ -145,7 +145,7 @@ module.exports = {
   createEvent,
   updateEvent,
   _deleteEvent,
-  getEventById,
+  getUserEvents,
   getTodayEvents,
   getPreviousEvents,
   getFutureEvents,

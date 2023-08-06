@@ -15,10 +15,18 @@ function splitString(text) {
 class EventsService {
   constructor() {}
 
-  async findEvent(id) {
-    const res = await models.Events.findByPk(id);
+
+  async getUserEvents(u_id) {
+    const res = await models.Events.findAll({
+      where: {
+        u_id: u_id,
+      },
+    });
     return res;
   }
+
+
+
 
   async findTodayEvents(date) {
     const res = await models.Events.findAll({

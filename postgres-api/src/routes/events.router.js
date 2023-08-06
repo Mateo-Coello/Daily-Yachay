@@ -5,7 +5,7 @@ const eventsController = require('../controllers/events.controller');
 const auth = require('../controllers/googleAuth.controller');
 
 router
-  .get("/:id", eventsController.getEventById)
+  .get("/:u_id", eventsController.getUserEvents)
   .get("/today/:currentDate", eventsController.getTodayEvents)
   .get("/previous/:currentDate", eventsController.getPreviousEvents)
   .get("/future/:currentDate", eventsController.getFutureEvents)
